@@ -10,8 +10,8 @@ release to "/Users/andrew.brookins/src/dungeon-crawler-agent/src/dungeon/Clockwo
 
 ! Blorb instructions
 
-storyfile leafname "Clockwork Descent.zblorb"
-storyfile "/Users/andrew.brookins/src/dungeon-crawler-agent/src/dungeon/Clockwork.inform/Build/output.z8" include
+storyfile leafname "Clockwork Descent.gblorb"
+storyfile "/Users/andrew.brookins/src/dungeon-crawler-agent/src/dungeon/Clockwork.inform/Build/output.ulx" include
 ifiction "/Users/andrew.brookins/src/dungeon-crawler-agent/src/dungeon/Clockwork.inform/Metadata.iFiction" include
 cover "/Applications/Inform.app/Contents/Resources/Internal/Miscellany/DefaultCover.jpg"
 picture 1 "/Applications/Inform.app/Contents/Resources/Internal/Miscellany/DefaultCover.jpg"

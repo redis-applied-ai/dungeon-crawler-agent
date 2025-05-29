@@ -16,6 +16,9 @@ from langchain_core.tools import tool
 from redis import Redis
 
 
+GAME = None
+
+
 class State(MessagesState):
     obs: str
     score: int
@@ -65,34 +68,44 @@ def get_score(text: str) -> int:
 scratchpad = {}
 
 
-def get_scratchpad_key(level: int) -> str:
-    return f"scratchpad:{level}"
+def get_scratchpad_key() -> str:
+    """
+    Get the key for the scratchpad for a specific game.
+    """
+    return f"scratchpad:{GAME}"
 
 
 @tool
-def read_scratchpad(key: str) -> dict[str, str]:
+def read_scratchpad() -> dict[str, str]:
     """
     Read the contents of your scratchpad. These are notes you've taken to
     remember things about the game as you play it, including a map of the
     rooms you've visited.
     """
-    level = 1  # TODO: get the level from the state
-    key_ = get_scratchpad_key(level)
+    logger.info("Reading scratchpad")
+    key_ = get_scratchpad_key()
     return redis_client.json().get(key_) or {}  # type: ignore
 
 
 @tool
-def update_scratchpad(value: dict[str, Any]):
+def update_scratchpad(items: dict[str, Any]):
     """
-    Update your scratchpad. These are notes you're taking to remember things
-    about the game as you play it. Keep track of the rooms you've visited,
-    including their exits, and any objects you've seen.
+    Update the items in your scratchpad. These are notes you're taking to
+    remember things about the game as you play it. Updating your scratchpad
+    replaces the previous contents of the scratchpad, so include all the items
+    you want to remember.
 
-    One of the keys should be "map" and should contain the rooms you've
-    visited, with exits and objects. For example:
+    Use your scratchpad:
+    1. To keep track of the rooms you've visited, including their exits, and
+       any objects you've seen. A "map" key should be used to store this map
+       of the rooms you've visited.
+    2. Your reflections on the outcome of your last move and what it could
+       mean for your strategy.
+
+    For example:
 
     update_scratchpad(
-        value={
+        items={
             "map": {
                 "Living Room": {
                     "description": "A cozy room with a fireplace",
@@ -113,12 +126,17 @@ def update_scratchpad(value: dict[str, Any]):
                 },
             },
         },
+        "reflections": [
+            "The silver key did not open the door in the kitchen. I should try
+            to find a different key to open the door in the kitchen.",
+            "I should take the knife in case I can use it later.",
+        ],
     )
     """
-    level = 1  # TODO: get the level from the state
-    key = get_scratchpad_key(level)
+    key = get_scratchpad_key()
     # TODO: Partial updates
-    redis_client.json().set(key, "$", value)
+    logger.info("Updating scratchpad: %s", items)
+    redis_client.json().set(key, "$", items)
 
 
 TOOLS = {
@@ -221,18 +239,24 @@ def generate_next_command(state: Dict, config: RunnableConfig) -> Dict:
             if tool is None:
                 raise ValueError(f"Unknown tool: {name}")
 
+            failed = False
             try:
-                response = tool.invoke(args)
+                message = tool.invoke(args)
             except Exception as e:
-                logger.error(f"Error invoking tool {name}: {e}")
-                response = f"Error invoking tool {name}: {e}"
+                message = f"Error invoking tool {name}: {e}"
+                logger.info(message)
+                failed = True
 
             messages.append(
                 ToolMessage(
                     tool_call_id=call["id"],
-                    content=str(response),
+                    content=message,
                 )
             )
+
+            # Give the LLM a chance to fix its tool call and try again.
+            if failed:
+                response = llm.invoke(messages)
 
         # continue conversation
         response = llm.invoke(messages)
@@ -267,14 +291,25 @@ def game_step(state: Dict) -> Dict:
     obs, _, done, infos = env.step(command)
     text = env.render(mode="text")
     # Clean the render text using our helper
-    cleaned_text = clean_render(text)
-    print(cleaned_text)
+    print(text)
+    # cleaned_text = clean_render(text)
+    # print(cleaned_text)
 
     state["obs"] = obs
     state["score"] = get_score(text)
     state["done"] = done
     state["moves"] += 1
     state["history"].append(f"{command.strip('\n')}: {obs.strip('\n')}")
+
+    # Reset the move count if the player has descended into the next level.
+    for phrase in (
+        "The metal groans under your weight!",
+        "You descend into the workshop",
+        "You carefully lower yourself through the hatch",
+        "You carefully climb down the maintenance ladder",
+    ):
+        if phrase in text:
+            state["moves"] = 0
 
     # The game doesn't always keep track of the turn number correctly.
     if state["moves"] >= 30:
@@ -453,7 +488,7 @@ if __name__ == "__main__":
         )
         formatted_items = []
 
-        for i, item in enumerate(past_feedback_items):
+        for i, item in enumerate(past_feedback_items):  # type: ignore
             if item is not None:
                 feedback_text = item.decode()
                 # Check if the feedback already has the WIN/LOSS prefix
@@ -485,6 +520,8 @@ if __name__ == "__main__":
         "end_time": None,
         "level": 1,
     }
+
+    GAME = args.game_path
 
     # Print the starting text.
     print(clean_render(text))

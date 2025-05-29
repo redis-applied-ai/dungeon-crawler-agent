@@ -46,15 +46,15 @@ Run the `src/play.py` file to watch the agent play. Specify
 the model with `--model` (only OpenAI models at the moment).
 
 ```bash
-python src/play.py --game-path games/dungeon.z8 --model o4-mini
+python src/play.py --game-path games/dungeon.ulx --model o4-mini
 ```
 
-PS: The agent can play any Z8 (Z-code, version 8) game you can find on the
-internet. Just change `--game-path` to point to other games!
+PS: The agent can play any Glulx or Z8 (Z-code, version 8) game you can find on
+the internet. Just change `--game-path` to point to the game you want to play!
 
 ### Command Line Options
 
-- `--game-path`: Path to the Z8 game file
+- `--game-path`: Path to a Glulx Z8 game file
 - `--model`: Language model to use (default: o4-mini)
 - `--thread-id`: ID for tracking memory between runs (helpful you want to try different tools, prompts, etc. while preserving the state of memory for another agent experiment)
 - `--clear-memory`: Clear memory of past games
@@ -66,7 +66,7 @@ If you want to build the Z8 file from source:
 1. Install Inform7
 2. Run `make`
 
-NOTE: This is optional - you can play with the provided Z8 file directly.
+NOTE: This is optional - you can play with the provided game file directly.
 
 ## Modifying the Agent
 
