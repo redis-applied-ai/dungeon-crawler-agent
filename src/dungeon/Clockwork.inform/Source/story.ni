@@ -10,7 +10,7 @@ When play begins:
 		"[the player's surroundings] / [turn count] / [score]";
 	now the right hand status line is "".
 
-[Level 1: Aerial Platform]
+[Level 0: Tower Entrance]
 
 Tower Entrance is a room. "You stand at the base of a massive clockwork tower, its brass and copper walls stretching impossibly high above you. Enormous gears slowly turn along its exterior, driving countless mechanisms. A series of iron rungs forms a ladder that ascends to what appears to be an aerial platform high above. Wind whistles around you, carrying the scent of oil and steam. A weathered sign nearby reads 'Caution: Clockwork mechanisms in operation. Authorized personnel only.'"
 
@@ -24,6 +24,9 @@ Instead of climbing the iron ladder:
 
 The warning sign is scenery in Tower Entrance. "The weathered metal sign reads: 'CAUTION: Clockwork mechanisms in operation. Authorized personnel only.'"
 Understand "sign" or "weathered sign" or "metal sign" or "caution" as the warning sign.
+
+
+[Level 1: Aerial Platform]
 
 Aerial Platform is a room. "You stand on a wind-swept sky dock atop a flying clockwork airship platform attached to the tower. Gears whirr, propellers spin, and steam vents hiss around you. A dirigible is moored to a spire to the east. A cargo crane stands nearby, currently misaligned, blocking a large elevator hatch in the floor. A narrow metal gantry extends toward the tower's edge, creaking ominously."
 
