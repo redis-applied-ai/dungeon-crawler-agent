@@ -14,4 +14,7 @@ dependencies = [
     "langchain-core",
     "langchain-openai",
     "langchain-anthropic",
+    "langgraph>=0.5.1",
+    "langsmith>=0.4.4",
+    "dotenv>=0.9.9",
 ]

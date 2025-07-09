@@ -1,10 +1,12 @@
 import argparse
 import datetime
 import logging
+import os
 import re
 from typing import Any, Dict
 
 import textworld.gym
+import dotenv
 from langchain_core.runnables import RunnableConfig
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.redis import RedisSaver
@@ -16,7 +18,12 @@ from langchain_core.tools import tool
 from redis import Redis
 
 
+dotenv.load_dotenv()
+
+
 GAME = None
+LOG_LEVEL = os.getenv("LOG_LEVEL", "WARNING")
+MAX_STEPS = int(os.getenv("MAX_STEPS", "400"))
 
 
 class State(MessagesState):
@@ -39,9 +46,18 @@ class State(MessagesState):
 MAX_FEEDBACK_ITEMS = 20
 
 
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=LOG_LEVEL)
+
+# Suppress INFO logging from common libraries
+logging.getLogger("httpx").setLevel(LOG_LEVEL)
+logging.getLogger("langgraph").setLevel(LOG_LEVEL)
+logging.getLogger("textworld").setLevel(LOG_LEVEL)
+logging.getLogger("openai").setLevel(LOG_LEVEL)
+logging.getLogger("redis").setLevel(LOG_LEVEL)
+logging.getLogger("redisvl").setLevel(LOG_LEVEL)
 
 logger = logging.getLogger(__name__)
+logger.setLevel(LOG_LEVEL)
 
 
 redis_client = Redis(host="localhost", port=6379, db=0)
@@ -51,18 +67,19 @@ saver = RedisSaver(
 saver.setup()
 
 
-def get_score(text: str) -> int:
+def get_score_change(text: str) -> int:
     """
-    Get the score from the left hand status line.
+    Get the score change from the game text.
 
-    The left hand status line looks like this:
-    [the player's surroundings] / [turn count] / [score]
+    The game shows score changes like:
+    [+2 points] or [-1 point]
     """
-    score = re.findall(r" / (\d+) / (\d+)", text)
-    if score:
-        return int(score[0][1])
-    else:
-        return 0
+    # Look for [+N points] or [-N points] pattern
+    score_change = re.findall(r"\[([+-]\d+) points?\]", text)
+    if score_change:
+        return int(score_change[0])
+
+    return 0
 
 
 scratchpad = {}
@@ -88,24 +105,24 @@ def read_scratchpad() -> dict[str, str]:
 
 
 @tool
-def update_scratchpad(items: dict[str, Any]):
+def update_scratchpad(contents: dict[str, Any]):
     """
-    Update the items in your scratchpad. These are notes you're taking to
+    Replace the contents of your scratchpad. These are notes you're taking to
     remember things about the game as you play it. Updating your scratchpad
     replaces the previous contents of the scratchpad, so include all the items
     you want to remember.
 
     Use your scratchpad:
     1. To keep track of the rooms you've visited, including their exits, and
-       any objects you've seen. A "map" key should be used to store this map
-       of the rooms you've visited.
-    2. Your reflections on the outcome of your last move and what it could
-       mean for your strategy.
+       any objects you've seen. Use a "map" key to store this map of the rooms
+       you've visited.
+    2. Your reflections on the outcome of your last move and what it could mean
+       for your strategy.
 
     For example:
 
     update_scratchpad(
-        items={
+        contents={
             "map": {
                 "Living Room": {
                     "description": "A cozy room with a fireplace",
@@ -132,11 +149,14 @@ def update_scratchpad(items: dict[str, Any]):
             "I should take the knife in case I can use it later.",
         ],
     )
+
+    *IMPORTANT*: Your input should be JSON and should have a "contents" key that
+    contains an object with the keys you want to set in the scratchpad.
     """
     key = get_scratchpad_key()
     # TODO: Partial updates
-    logger.info("Updating scratchpad: %s", items)
-    redis_client.json().set(key, "$", items)
+    logger.info("Updating scratchpad: %s", contents)
+    redis_client.json().set(key, "$", contents)
 
 
 TOOLS = {
@@ -170,9 +190,10 @@ def plan_strategy(state: Dict, config: RunnableConfig) -> Dict:
     
     Your plan:
     """
-    llm = state["llm"]
-    response = llm.invoke(prompt)
-    plan = response.text()
+    # Use LLM without tools for planning to avoid tool call conflicts
+    planning_llm = ChatOpenAI(model=state["llm"].model_name)
+    response = planning_llm.invoke(prompt)
+    plan = response.content
     state["plan"] = plan
     print(f"<Thinking> My plan is: \n{plan}")
     return state
@@ -288,31 +309,24 @@ def game_step(state: Dict) -> Dict:
     Execute the generated command in the game environment.
     """
     command = state["command"]
-    obs, _, done, infos = env.step(command)
+    obs, reward, done, infos = env.step(command)
+    logger.debug(
+        f"env.step returned - Obs: {obs}, Reward: {reward}, Done: {done}, Infos: {infos}"
+    )
+
     text = env.render(mode="text")
-    # Clean the render text using our helper
-    print(text)
-    # cleaned_text = clean_render(text)
-    # print(cleaned_text)
+    if state["moves"] != 0:
+        print(text)
 
     state["obs"] = obs
-    state["score"] = get_score(text)
+    score_change = get_score_change(text)
+    state["score"] = state["score"] + score_change
     state["done"] = done
     state["moves"] += 1
     state["history"].append(f"{command.strip('\n')}: {obs.strip('\n')}")
 
-    # Reset the move count if the player has descended into the next level.
-    for phrase in (
-        "The metal groans under your weight!",
-        "You descend into the workshop",
-        "You carefully lower yourself through the hatch",
-        "You carefully climb down the maintenance ladder",
-    ):
-        if phrase in text:
-            state["moves"] = 0
-
     # The game doesn't always keep track of the turn number correctly.
-    if state["moves"] >= 30:
+    if state["moves"] >= MAX_STEPS:
         print("Game over! Too many moves.")
         state["game_outcome"] = "loss"
         state["done"] = True
@@ -322,6 +336,10 @@ def game_step(state: Dict) -> Dict:
         else:
             state["game_outcome"] = "loss"
         state["done"] = True
+    elif state["done"] and not state.get("game_outcome"):
+        # TextWorld ended the game for some other reason
+        print("Game ended unexpectedly by TextWorld environment.")
+        state["game_outcome"] = "loss"
 
     return state.copy()
 
@@ -342,11 +360,11 @@ def game_over(state: State, config: RunnableConfig) -> State:
 
     prompt = f"""
     You are a language agent who has just played a text-based adventure game.
-    Evaluate your performance with extreme brevity. If your plan failed, try to
-    evaluate why, and include enough detail that your feedback will make sense
-    without access to the original plan. Focus on what you can do differently in
-    the next attempt.
-
+    Evaluate your performance. Evaluate which parts of your plan worked, and so
+    are worth trying again on a subsequent play of the game, and which didn't,
+    so shouldn't be tried again. Focus on what you can do differently in
+    the next attempt. If you won, consider how you might win faster.
+    
     <starting_text>
     The starting text of the game:
     {state["starting_text"]}
@@ -387,7 +405,23 @@ def game_over(state: State, config: RunnableConfig) -> State:
     print("My feedback on the game: ", new_feedback)
 
     # Format the feedback entry with the outcome
-    feedback_entry = f"[{state['game_outcome']}] {new_feedback}"
+    feedback_entry = f"""
+    <game_date>
+    {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+    </game_date>
+    
+    <game_plan>
+    {state["plan"]}
+    </game_plan>
+
+    <game_outcome>
+    {state["game_outcome"]}
+    </game_outcome>
+
+    <game_feedback>
+    {new_feedback}
+    </game_feedback>
+    """
 
     # If there are too many feedback items, summarize the oldest ones and add
     # the summary to the list.
@@ -399,9 +433,9 @@ def game_over(state: State, config: RunnableConfig) -> State:
 
         prompt = f"""
         Summarize the following feedback about your performance in a game. This
-        feedback was gathered from previous games you played. Use 100 words or
-        less to capture only information useful for future games. Be sure to preserve
-        information about which games were wins and which were losses.
+        feedback was gathered from previous games you played. Capture only
+        information useful for future games. Be sure to preserve information
+        about which actions led to wins and which led to losses.
 
         <feedback_to_summarize>
         Your previous feedback:
@@ -473,7 +507,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     thread_id = args.thread_id
 
-    env_id = textworld.gym.register_game(args.game_path, max_episode_steps=50)
+    env_id = textworld.gym.register_game(
+        args.game_path, max_episode_steps=MAX_STEPS
+    )  # TextWorld's count is sometimes different than ours
     env = textworld.gym.make(env_id)
     obs, infos = env.reset()
     text = env.render(mode="text")
@@ -519,15 +555,16 @@ if __name__ == "__main__":
         "start": datetime.datetime.now(),
         "end_time": None,
         "level": 1,
+        "game_outcome": "",
     }
 
     GAME = args.game_path
 
-    # Print the starting text.
-    print(clean_render(text))
-
     conf = RunnableConfig(
         configurable={"thread_id": thread_id},
-        recursion_limit=100,
+        recursion_limit=1000,
     )
+
+    print(text)
+
     compiled.invoke(initial_state, conf)

@@ -9,16 +9,11 @@ When play begins:
 	now the left hand status line is
 		"[the player's surroundings] / [turn count] / [score]";
 	now the right hand status line is "";
+	move the player to Aerial Platform.
 
 [Level 1: Aerial Platform - Your Starting Location]
 
 Aerial Platform is a room. "You stand on a wind-swept sky dock atop a flying clockwork airship platform attached to the tower, having just escaped from your prison cell high above. Gears whirr, propellers spin, and steam vents hiss around you. A dirigible is moored to a spire to the east. A cargo crane stands nearby, currently misaligned, blocking a large elevator hatch in the floor. A control panel with an empty slot sits near the crane. A narrow metal gantry extends toward the tower's edge, creaking ominously. You can hear the distant sound of alarm bells from above - you must descend quickly to escape."
-
-The propellers are scenery in Aerial Platform. "Large brass propellers mounted on the platform's sides, spinning steadily to help maintain the airship's stability. Their constant rotation creates a steady thrum that mixes with the wind."
-Understand "propeller" or "brass propellers" or "platform propellers" or "spinning propellers" as the propellers.
-
-The platform steam vents are scenery in Aerial Platform. "Small vents in the platform's decking that release excess steam from the tower's systems below. They hiss periodically, creating small clouds of white vapor that are quickly dispersed by the wind."
-Understand "steam vents" or "vents" or "platform vents" or "steam openings" or "deck vents" as the platform steam vents.
 
 The dirigible is scenery in Aerial Platform. "A sleek brass and mahogany airship tied to a mooring post. Its balloon is made of treated canvas, taut with lifting gas."
 Understand "airship" or "balloon" or "gas bag" or "envelope" as the dirigible.
@@ -32,18 +27,6 @@ Understand "panel" or "brass panel" or "lever slot" or "slot" or "diagram" as th
 
 Workshop is a room. "An expansive mechanical workshop fills this level of the tower. Churning gears, belt-driven machines, and boiling pipes surround you in every direction. The air is dimmer here, oil-stained and heavy with the scent of machine grease - a stark contrast to the airy platform above. Steam hisses from valves, and the floor vibrates with the motion of a colossal central gear assembly. Conveyor belts carry parts across the room. Doorways lead to a storage area to the east, a control room to the north, and a machine bay to the west. You're one level closer to freedom, but you can still hear the faint echoes of pursuit from above."
 
-The belt-driven machines are scenery in Workshop. "Various mechanical devices powered by an intricate system of leather belts and pulleys. They hum and whir as they process components, their rhythm creating a steady industrial symphony."
-Understand "machines" or "belt machines" or "belt-driven machines" or "mechanical devices" or "devices" or "pulleys" or "belts" as the belt-driven machines.
-
-The boiling pipes are scenery in Workshop. "A network of copper and steel pipes carrying superheated steam throughout the workshop. They occasionally emit jets of steam with sharp hissing sounds, and their surfaces are too hot to touch."
-Understand "pipes" or "pipe" or "copper pipes" or "steel pipes" or "steam pipes" or "network" as the boiling pipes.
-
-The central gear assembly is scenery in Workshop. "A massive mechanical centerpiece that dominates the workshop floor. Enormous interlocking gears turn with precise timing, their motion creating vibrations that can be felt through the floor. It appears to be the primary power source for the entire workshop level."
-Understand "gears" or "gear" or "assembly" or "central assembly" or "massive gears" or "colossal assembly" or "centerpiece" or "power source" as the central gear assembly.
-
-The conveyor belts are scenery in Workshop. "Moving belt systems that transport components and materials between different areas of the workshop. They carry various mechanical parts, tools, and raw materials in an endless cycle."
-Understand "belts" or "belt" or "conveyor" or "belt systems" or "moving belts" or "transport belts" as the conveyor belts.
-
 The elevator hatch is a door. It is down of Aerial Platform and up of Workshop. The elevator hatch is closed and locked. Understand "hatch" or "elevator hatch" or "floor hatch" or "lift hatch" or "platform hatch" as the elevator hatch.
 
 The gantry is a device in Aerial Platform. The gantry is scenery.
@@ -53,8 +36,8 @@ Understand "metal gantry" or "narrow gantry" or "walkway" or "platform" or "brid
 
 A workbench is scenery in Aerial Platform. "A sturdy steel bench marked with tool dents. A toolbox rests upon it."
 Understand "bench" or "steel bench" or "work bench" or "table" as the workbench.
-A toolbox is a container in Aerial Platform. It is closed and openable. "A battered metal toolbox, likely holding useful tools." Inside the toolbox are a bronze lever and a heavy wrench.
-Understand "tool box" or "metal toolbox" or "battered toolbox" or "battered metal toolbox" or "box" as the toolbox.
+A toolbox is a container on the workbench. It is closed and openable. "A battered metal toolbox, likely holding useful tools." Inside the toolbox are a bronze lever and a heavy wrench.
+Understand "tool box" or "metal toolbox" or "battered toolbox" or "box" as the toolbox.
 
 After opening the toolbox:
 	say "Inside the toolbox, you find a bronze lever and a heavy wrench. The lever looks like it would fit into a control mechanism, while the wrench appears suitable for mechanical repairs."
@@ -67,7 +50,7 @@ Understand "wrench" or "tool" or "spanner" or "repair tool" as the heavy wrench.
 The description is "A robust wrench for tightening nuts and bolts. It looks like it could help repair mechanical devices." The heavy wrench is portable.
 
 A supply crate is a container in Aerial Platform. It is closed and openable. "A reinforced wooden crate stamped with the airship's insignia." Inside the supply crate is the brass spyglass.
-Understand "crate" or "wooden crate" or "reinforced crate" or "reinforced wooden crate" or "box" or "container" as the supply crate.
+Understand "crate" or "wooden crate" or "reinforced crate" or "box" or "container" as the supply crate.
 The brass spyglass is a thing in the supply crate.
 Understand "spyglass" or "glass" or "telescope" or "scope" or "brass telescope" or "optical device" as the brass spyglass.
 The description is "A finely crafted clockwork spyglass of polished brass." The brass spyglass is portable.
@@ -91,7 +74,10 @@ Instead of inserting the bronze lever into the control panel when the crane is m
 	now the elevator hatch is open;
 	say "You slot the bronze lever into the control panel. Gears grind as the crane rotates into alignment, and steam hisses as the hatch unlocks and swings open. [bracket]+5[close bracket]".
 
-Instead of putting the bronze lever on the control panel: try inserting the bronze lever into the control panel.
+Instead of putting the bronze lever in the control panel: try inserting the bronze lever into the control panel.
+Instead of using the bronze lever on the control panel: try inserting the bronze lever into the control panel.
+Instead of activating the control panel with the bronze lever: try inserting the bronze lever into the control panel.
+Instead of operating the control panel with the bronze lever: try inserting the bronze lever into the control panel.
 
 Instead of inserting the bronze lever into the control panel when the crane is aligned:
 	say "The lever is already in place and the crane hums contentedly.".
@@ -105,6 +91,8 @@ Instead of going down when the gantry is intact and the elevator hatch is closed
 	move the player to Workshop;
 	end the story saying "The metal groans under your weight! The gantry buckles and you plunge through a trapdoor in the floor! Your hasty escape attempt has backfired, but at least you're one level closer to freedom.".
 
+Instead of walking on the gantry when the gantry is intact and the elevator hatch is closed: try going down.
+Instead of stepping on the gantry when the gantry is intact and the elevator hatch is closed: try going down.
 
 Cogsworth is a person in Aerial Platform. "A small clockwork automaton tinkerer clings to the gantry, its right leg hinge loose." Cogsworth can be repaired or broken. Cogsworth is broken.
 Understand "automaton" or "tinkerer" or "clockwork automaton" or "small automaton" or "clockwork tinkerer" or "robot" or "mechanical man" or "clockwork" as Cogsworth.
@@ -118,6 +106,10 @@ After giving the heavy wrench to Cogsworth when Cogsworth is broken:
 	increase the score by 5;
 	say "You hand the wrench to Cogsworth. He tightens his leg hinge with a few clicks, stands upright, and says, 'The code for the workshop lift is 472.' [bracket]+5[close bracket]".
 
+Instead of using the heavy wrench on Cogsworth: try giving the heavy wrench to Cogsworth.
+Instead of repairing Cogsworth with the heavy wrench: try giving the heavy wrench to Cogsworth.
+Instead of fixing Cogsworth with the heavy wrench: try giving the heavy wrench to Cogsworth.
+Instead of helping Cogsworth with the heavy wrench: try giving the heavy wrench to Cogsworth.
 
 After giving the heavy wrench to Cogsworth when Cogsworth is repaired:
 	say "Cogsworth pats his leg gratefully but doesn't need further help.".
@@ -144,6 +136,10 @@ Instead of switching on the Steam Valve:
 	now the steam vent is active;
 	say "Steam hisses from the vent!".
 
+Instead of turning on the Steam Valve: try switching on the Steam Valve.
+Instead of activating the Steam Valve: try switching on the Steam Valve.
+Instead of using the Steam Valve: try switching on the Steam Valve.
+Instead of operating the Steam Valve: try switching on the Steam Valve.
 
 After switching on the Steam Valve when the steam vent is active and the Raven is in the location:
 	remove the Raven from play;
@@ -163,41 +159,16 @@ Instead of going down when the elevator hatch is open and the elevator hatch is 
 	say "You descend into the workshop, gears clanking behind you. One level closer to freedom.".
 
 Instead of entering the elevator hatch when the elevator hatch is open: try going down.
+Instead of climbing down the elevator hatch when the elevator hatch is open: try going down.
+Instead of descending the elevator hatch when the elevator hatch is open: try going down.
 	
 [Level 2: Workshop - Changed from single room to multiple rooms]
 
 The Storage Area is east of Workshop. "This cluttered space houses spare parts, tools, and maintenance supplies. Metal shelves line the walls, packed with components and engineering materials. A heavy tool chest sits against the far wall. The main workshop lies to the west."
 
-The metal shelves are scenery in Storage Area. "Sturdy steel shelving units line the walls, packed with an assortment of mechanical components, spare parts, and engineering materials. Every shelf appears to be completely full."
-Understand "shelves" or "shelf" or "steel shelves" or "shelving" or "steel shelving" or "shelving units" as the metal shelves.
-
-The components are scenery in Storage Area. "Various mechanical parts, gears, springs, bolts, and other components needed for maintaining the workshop's machinery. They're organized in bins and containers throughout the storage area."
-Understand "parts" or "spare parts" or "mechanical parts" or "gears" or "springs" or "bolts" or "bins" or "containers" as the components.
-
-The engineering materials are scenery in Storage Area. "Raw materials used in the workshop's operations: sheets of metal, lengths of copper pipe, brass fittings, and various other industrial supplies."
-Understand "materials" or "raw materials" or "metal" or "sheets" or "metal sheets" or "copper pipe" or "brass fittings" or "fittings" or "supplies" or "industrial supplies" as the engineering materials.
-
 The Control Room is north of Workshop. "The workshop's nerve center is filled with monitoring equipment and control panels. Pressure gauges, brass dials, and lever arrays cover the walls. A large service elevator platform occupies the center of the room, its control panel gleaming with polished brass fixtures. The main workshop is to the south."
 
-The pressure gauges are scenery in Control Room. "Various gauges showing steam pressure, temperature, and flow rates throughout the workshop systems. Most readings appear to be within normal operational parameters."
-Understand "gauges" or "gauge" or "pressure gauge" or "steam gauge" or "temperature gauge" or "monitoring equipment" as the pressure gauges.
-
-The brass dials are scenery in Control Room. "Polished brass control dials for fine-tuning the workshop's mechanical systems. They gleam in the light from the overhead fixtures."
-Understand "dials" or "dial" or "brass dial" or "control dial" or "brass dials" or "polished dials" as the brass dials.
-
-The lever arrays are scenery in Control Room. "Rows of levers for controlling various workshop functions, though most appear to be for routine operations. They're arranged in neat, methodical rows along the wall panels."
-Understand "levers" or "lever" or "arrays" or "lever array" or "control levers" or "wall levers" as the lever arrays.
-
 The Machine Bay is west of Workshop. "The constant din of operating machinery fills this high-ceilinged chamber. Massive gear assemblies turn overhead, while automated belt mechanisms transport components across the room. Steam regularly vents from pipes along the walls. A small floor hatch bolted to the floor appears to be an emergency exit. The main workshop lies to the east."
-
-The massive gear assemblies are scenery in Machine Bay. "Enormous mechanical gear systems mounted on the ceiling, their interlocking teeth meshing with precise timing. They turn with tremendous force, providing power distribution throughout the machine bay."
-Understand "gears" or "gear" or "assemblies" or "assembly" or "massive gears" or "gear systems" or "mechanical gears" or "overhead gears" or "ceiling gears" as the massive gear assemblies.
-
-The automated belt mechanisms are scenery in Machine Bay. "Complex conveyor and belt systems that automatically transport components across the room. They operate with mechanical precision, moving parts from one station to another without human intervention."
-Understand "belts" or "belt" or "mechanisms" or "belt mechanisms" or "automated belts" or "conveyor systems" or "transport systems" as the automated belt mechanisms.
-
-The wall steam vents are scenery in Machine Bay. "Regular openings in the wall pipes that release excess steam pressure. They emit periodic jets of hot steam with sharp hissing sounds, creating a hazardous environment near the walls."
-Understand "vents" or "vent" or "steam vents" or "wall vents" or "steam openings" or "pressure vents" as the wall steam vents.
 
 [Workshop machinery and objects redistributed across rooms]
 
@@ -274,7 +245,9 @@ Instead of fixing the steam pipe:
 	otherwise:
 		say "You need something to seal the broken pipe.".
 
+Instead of using the spare gasket on the steam pipe: try fixing the steam pipe.
 Instead of putting the spare gasket on the steam pipe: try fixing the steam pipe.
+Instead of applying the spare gasket to the steam pipe: try fixing the steam pipe.
 
 Understand "fix [something]" or "repair [something]" or "seal [something]" as fixing.
 Fixing is an action applying to one thing.
@@ -323,6 +296,7 @@ Instead of asking Marigold about "help" when Marigold carries the pocket watch:
 Instead of asking Marigold about "watch": try asking Marigold about "help".
 Instead of asking Marigold about "reward": try asking Marigold about "help".
 Instead of asking Marigold about "thanks": try asking Marigold about "help".
+Instead of talking to Marigold: try asking Marigold about "help".
 
 A gearling is a kind of animal. "A fist-sized mechanical creature scuttles across the floor, its gear-shaped legs clicking on the metal." Understand "gear spider" or "mechanical pest" or "gear creature" or "creature" or "spider" or "mechanical spider" or "pest" or "bug" or "mechanical bug" as a gearling.
 The description of a gearling is "A small mechanical pest resembling a spider made of gears and springs. Its tiny metal mandibles look sharp enough to cut through wire."
@@ -357,7 +331,9 @@ Instead of pouring the machine oil on a gearling:
 		otherwise:
 			say "One gearling down, but there seem to be more elsewhere in the workshop.";
 
+Instead of using the machine oil on a gearling: try pouring the machine oil on the noun.
 Instead of throwing the machine oil at a gearling: try pouring the machine oil on the noun.
+Instead of applying the machine oil to a gearling: try pouring the machine oil on the noun.
 
 Understand "pour [something] on [something]" as pouring it on. Pouring it on is an action applying to two things.
 
@@ -390,17 +366,15 @@ Instead of taking the crowbar:
 	increase the score by 1;
 	say "You take the crowbar. [bracket]+1 point[close bracket]".
 
-Instead of opening the emergency hatch when the emergency hatch is locked:
-	say "The emergency hatch is bolted shut from this side. You'll need some kind of prying tool to force it open."
-
-Instead of opening the emergency hatch when the emergency hatch is unlocked:
-	say "The emergency hatch is already open. You can go down through it to escape."
-
 Instead of unlocking the emergency hatch with the crowbar:
 	now the emergency hatch is unlocked;
 	increase the score by 3;
 	say "You wedge the crowbar into the seam of the hatch and heave with all your strength. With a screech of metal, the bolts give way and the hatch swings open. [bracket]+3 points[close bracket]".
 
+Instead of using the crowbar on the emergency hatch: try unlocking the emergency hatch with the crowbar.
+Instead of prying the emergency hatch with the crowbar: try unlocking the emergency hatch with the crowbar.
+Instead of opening the emergency hatch with the crowbar: try unlocking the emergency hatch with the crowbar.
+Instead of forcing the emergency hatch with the crowbar: try unlocking the emergency hatch with the crowbar.
 
 Instead of going down through the emergency hatch when the emergency hatch is unlocked:
 	say "You carefully lower yourself through the hatch and begin descending the narrow spiral staircase. It leads to a hidden emergency exit at the tower's base. You emerge into daylight, finally free from both your prison and the clockwork labyrinth. Behind you, the tower's alarms continue to sound, but you are beyond their reach now.";
@@ -410,59 +384,11 @@ Instead of going down through the emergency hatch when the emergency hatch is un
 
 Main Forge is a room. "You've entered the fiery heart of the tower's manufacturing operations at its base level. This vast chamber glows with intense orange light from molten metal baths and a massive furnace dominating the center. The heat is oppressive, making sweat bead on your skin instantly. Enormous gears line the walls, awaiting installation elsewhere in the tower, while conveyor belts transport raw materials to various workstations. The continuous clanking of an automated hammer punctuates the roar of the furnace. Steam rises through grates in the floor from the foundational systems below. Doorways lead to a control room to the north, a materials storage area to the east, and a cooling chamber to the west. Freedom lies just beyond these chambers - you can almost taste it."
 
-The molten metal baths are scenery in Main Forge. "Glowing pools of liquid metal that cast dancing orange light throughout the chamber. They bubble and hiss with intense heat, too dangerous to approach without proper protection."
-Understand "baths" or "metal baths" or "molten baths" or "pools" or "liquid metal" or "glowing pools" as the molten metal baths.
-
-The enormous gears are scenery in Main Forge. "Massive mechanical gears of various sizes line the walls, awaiting installation elsewhere in the tower. They're perfectly crafted, their teeth precisely machined and their surfaces gleaming despite the forge's heat."
-Understand "gears" or "gear" or "enormous gears" or "massive gears" or "wall gears" or "mechanical gears" as the enormous gears.
-
-The forge conveyor belts are scenery in Main Forge. "Heavy-duty conveyor systems that transport raw materials to various workstations throughout the forge. They move continuously, carrying ingots, tools, and components with mechanical precision."
-Understand "conveyor belts" or "belts" or "conveyor" or "transport belts" or "conveyor systems" as the forge conveyor belts.
-
-The workstations are scenery in Main Forge. "Various specialized work areas throughout the forge, each equipped with different tools and apparatus for specific metalworking tasks. They're arranged for efficient workflow around the central furnace."
-Understand "workstation" or "work areas" or "work stations" or "stations" or "apparatus" as the workstations.
-
-The floor grates are scenery in Main Forge. "Metal grating in the floor that allows steam from the foundational systems below to rise into the main forge area. They glow with heat from the systems beneath."
-Understand "grates" or "grate" or "floor grates" or "metal grating" or "grating" or "floor grating" as the floor grates.
-
 Forge Control Room is north of Main Forge. "This room overlooks the main forge floor through a large heat-resistant glass window. The walls are lined with gauges, dials, and levers controlling various aspects of the forging process. A large smelter control panel dominates the center of the room, featuring four sequential levers arranged in a row. A chalkboard hangs on the wall near the panel. The intense heat of the main forge is somewhat mitigated here, though the air remains uncomfortably warm. The main forge area lies to the south."
-
-The heat-resistant glass window is scenery in Forge Control Room. "A large window made of specially treated glass that can withstand the intense heat of the main forge. Through it, you can see the glowing furnace and the busy activity of the forge floor below."
-Understand "window" or "glass window" or "large window" or "heat-resistant window" or "glass" as the heat-resistant glass window.
-
-The forge gauges are scenery in Forge Control Room. "Various monitoring instruments displaying temperature, pressure, and other critical measurements for the forging process. They provide real-time data about the forge's operational status."
-Understand "gauges" or "gauge" or "monitoring instruments" or "instruments" or "temperature gauges" or "pressure gauges" as the forge gauges.
-
-The forge dials are scenery in Forge Control Room. "Precision control dials for adjusting various aspects of the forging process. They allow fine-tuning of temperature, pressure, and timing for different metalworking operations."
-Understand "dials" or "dial" or "control dials" or "precision dials" or "adjustment dials" as the forge dials.
-
-The control levers are scenery in Forge Control Room. "Wall-mounted levers for controlling various forge functions. They're separate from the smelter control panel and handle routine operational tasks."
-Understand "levers" or "lever" or "wall levers" or "operational levers" or "forge levers" as the control levers.
 
 Materials Storage is east of Main Forge. "Raw materials for the forge's operation are stored in this high-ceilinged chamber. Bins of metal ingots, crates of coal, and barrels of various industrial chemicals line the walls. A massive magnetic crane system runs along ceiling tracks, designed to move heavy materials to and from the main forge. A control box for the crane hangs from a chain nearby. Warning signs about magnetic hazards are posted prominently. The main forge lies to the west."
 
-The bins of metal ingots are scenery in Materials Storage. "Large storage bins containing metal ingots of various alloys - steel, brass, copper, and iron. They're sorted by type and stacked efficiently for easy access by the magnetic crane."
-Understand "bins" or "ingots" or "metal ingots" or "metal bins" or "storage bins" or "steel ingots" or "brass ingots" or "copper ingots" or "iron ingots" as the bins of metal ingots.
-
-The crates of coal are scenery in Materials Storage. "Wooden crates filled with coal for fueling the forge's furnaces. The coal is of high quality, selected specifically for metalworking applications."
-Understand "crates" or "coal" or "crates of coal" or "coal crates" or "wooden crates" or "fuel" as the crates of coal.
-
-The barrels of chemicals are scenery in Materials Storage. "Industrial barrels containing various chemicals used in the forging process - flux compounds, cleaning agents, and other specialized materials. Warning labels indicate their hazardous nature."
-Understand "barrels" or "chemicals" or "chemical barrels" or "industrial barrels" or "flux compounds" or "cleaning agents" or "hazardous materials" as the barrels of chemicals.
-
-The ceiling tracks are scenery in Materials Storage. "Heavy-duty rail systems mounted on the ceiling that allow the magnetic crane to move throughout the storage area. They're built to support tremendous weight."
-Understand "tracks" or "ceiling tracks" or "rail systems" or "rails" or "crane tracks" or "overhead tracks" as the ceiling tracks.
-
 Cooling Chamber is west of Main Forge. "This room serves as both a cooling area for newly forged items and a holding cell. The temperature here is noticeably lower than the main forge, with large fans circulating air. Racks of cooling molds line one wall, while a series of water troughs stand ready for quenching hot metal. In the corner, behind sturdy iron bars, is what appears to be a large cage. The main forge area is to the east."
-
-The large fans are scenery in Cooling Chamber. "Industrial-sized fans mounted on the walls and ceiling, designed to circulate air and help cool newly forged items. They turn steadily, creating a much more comfortable environment than the main forge."
-Understand "fans" or "fan" or "large fans" or "industrial fans" or "cooling fans" or "air circulation" as the large fans.
-
-The water troughs are scenery in Cooling Chamber. "A series of long, rectangular water containers positioned for quenching hot metal. They're filled with clean water and positioned strategically for easy access from the main forge."
-Understand "troughs" or "trough" or "water troughs" or "water containers" or "quenching troughs" or "containers" or "water" as the water troughs.
-
-The cooling racks are scenery in Cooling Chamber. "Metal racks designed to hold cooling molds and newly forged items. They're arranged to provide optimal air circulation for the cooling process."
-Understand "racks" or "rack" or "cooling racks" or "metal racks" or "mold racks" as the cooling racks.
 
 [Main Forge Scenery and Objects]
 
@@ -484,20 +410,24 @@ The description is "A circular hatch set into the floor, designed like an enormo
 The smelting pit is scenery in Main Forge. "A deep pit filled with bubbling molten metal. Excess material drains through a large pipe at the bottom, presumably to be recycled. It's far too hot to approach without protection."
 Understand "pit" or "smelting pit" or "molten pit" or "metal pit" or "forge pit" or "crucible" as the smelting pit.
 
-The smelting pit can be heated or cooled. The smelting pit is heated.
+The smelting pit can be molten or solidified. The smelting pit is molten.
 
 The water valve is a device in Main Forge. The water valve can be switched on or switched off. The water valve is switched off.
 Understand "valve" or "water valve" or "emergency valve" or "cooling valve" or "flood valve" as the water valve.
 The description is "An emergency water valve designed to flood the smelting pit with cooling water in case of an emergency."
 
 Instead of switching on the water valve:
-	if the smelting pit is heated:
-		now the smelting pit is cooled;
+	if the smelting pit is molten:
+		now the smelting pit is solidified;
 		now the water valve is switched on;
 		say "You turn the valve. Water gushes into the smelting pit, causing clouds of steam to billow up as the molten metal rapidly cools and solidifies.";
 	otherwise:
 		say "The water valve is already active and the smelting pit has been cooled.";
 
+Instead of turning on the water valve: try switching on the water valve.
+Instead of activating the water valve: try switching on the water valve.
+Instead of using the water valve: try switching on the water valve.
+Instead of operating the water valve: try switching on the water valve.
 Instead of opening the water valve: try switching on the water valve.
 
 [Steam Golem]
@@ -590,6 +520,9 @@ Instead of pushing the red button:
 	otherwise:
 		say "The crane is already powered down.";
 
+Instead of pressing the red button: try pushing the red button.
+Instead of hitting the red button: try pushing the red button.
+Instead of using the red button: try pushing the red button.
 
 The magnetic warning sign is scenery in Materials Storage. "WARNING: POWERFUL MAGNETIC FIELD IN OPERATION. NO METAL OBJECTS OR TOOLS BEYOND THIS POINT WHEN CRANE IS ACTIVE. PACEMAKER USERS KEEP CLEAR."
 Understand "warning" or "sign" or "magnetic sign" or "warning sign" or "danger sign" or "notice" as the magnetic warning sign.
@@ -693,7 +626,9 @@ After inserting the blank mold into the massive furnace:
 	otherwise:
 		say "The mold needs to be empty before you can use it for a new casting.";
 
-Instead of putting the blank mold on the massive furnace: try inserting the blank mold into the massive furnace.
+Instead of putting the blank mold in the massive furnace: try inserting the blank mold into the massive furnace.
+Instead of using the blank mold on the massive furnace: try inserting the blank mold into the massive furnace.
+Instead of placing the blank mold in the massive furnace: try inserting the blank mold into the massive furnace.
 
 Understand "cast gear" or "make gear" or "forge gear" or "create gear" or "form gear" or "mold gear" as casting the gear. Casting the gear is an action applying to nothing.
 
@@ -730,6 +665,7 @@ Instead of giving the philosopher's stone shard to Tock:
 	say "As you show the glowing shard to Tock, its hostile posture relaxes. The automaton's eyes change from red to a calm blue. 'The flux stone. You are not one of the Master's minions then,' it says in a voice like meshing gears.";
 
 Instead of showing the philosopher's stone shard to Tock: try giving the philosopher's stone shard to Tock.
+Instead of using the philosopher's stone shard on Tock: try giving the philosopher's stone shard to Tock.
 
 Instead of unlocking the cage door with the crowbar:
 	now the cage door is unlocked;
@@ -768,7 +704,7 @@ Understand "maintenance access" or "access point" or "ladder" or "maintenance la
 
 The emergency exit can be available or unavailable. The emergency exit is unavailable.
 
-Instead of examining the smelting pit when the smelting pit is cooled:
+Instead of examining the smelting pit when the smelting pit is solidified:
 	say "With the molten metal cooled and solidified, you can now see a maintenance ladder leading down through the drainage pipe at the bottom of the pit. It appears to be an alternate route downward.";
 	now the emergency exit is available.
 
@@ -777,7 +713,7 @@ Understand "climb down ladder" or "descend ladder" or "climb ladder" or "use lad
 Check descending the pit:
 	if the player is not in Main Forge:
 		say "There's no ladder here." instead;
-	if the smelting pit is heated:
+	if the smelting pit is molten:
 		say "The smelting pit is filled with dangerous molten metal. You can't climb down through it." instead;
 	if the emergency exit is unavailable:
 		say "You don't see any way to climb down." instead.
