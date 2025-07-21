@@ -17,4 +17,5 @@ dependencies = [
     "langgraph>=0.5.1",
     "langsmith>=0.4.4",
     "dotenv>=0.9.9",
+    "ruff>=0.12.2",
 ]

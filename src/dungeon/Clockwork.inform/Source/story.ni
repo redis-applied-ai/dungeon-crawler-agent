@@ -12,7 +12,7 @@ When play begins:
 
 [Level 1: Aerial Platform - Your Starting Location]
 
-Aerial Platform is a room. "You stand on a wind-swept sky dock atop a flying clockwork airship platform attached to the tower, having just escaped from your prison cell high above. Gears whirr, propellers spin, and steam vents hiss around you. A dirigible is moored to a spire to the east. A cargo crane stands nearby, currently misaligned, blocking a large elevator hatch in the floor. A control panel with an empty slot sits near the crane. A narrow metal gantry extends toward the tower's edge, creaking ominously. You can hear the distant sound of alarm bells from above - you must descend quickly to escape."
+Aerial Platform is a room. "You stand on a wind-swept sky dock atop a flying clockwork airship platform attached to the tower, having just escaped from your prison cell high above. Gears whirr, propellers spin, and steam vents hiss around you. A dirigible is moored to a spire to the east. A cargo crane stands nearby, currently misaligned, blocking a large elevator hatch in the floor. A control panel with an empty slot sits near the crane. A narrow metal gantry extends toward the tower's edge, creaking ominously. A small clockwork automaton named Cogsworth clings to the gantry with a damaged leg that clearly needs repair. You can hear the distant sound of alarm bells from above - you must descend quickly to escape."
 
 The propellers are scenery in Aerial Platform. "Large brass propellers mounted on the platform's sides, spinning steadily to help maintain the airship's stability. Their constant rotation creates a steady thrum that mixes with the wind."
 Understand "propeller" or "brass propellers" or "platform propellers" or "spinning propellers" as the propellers.
@@ -106,17 +106,21 @@ Instead of going down when the gantry is intact and the elevator hatch is closed
 	end the story saying "The metal groans under your weight! The gantry buckles and you plunge through a trapdoor in the floor! Your hasty escape attempt has backfired, but at least you're one level closer to freedom.".
 
 
-Cogsworth is a person in Aerial Platform. "A small clockwork automaton tinkerer clings to the gantry, its right leg hinge loose." Cogsworth can be repaired or broken. Cogsworth is broken.
+Cogsworth is a person in Aerial Platform. "A small clockwork automaton tinkerer clings to the gantry, its right leg hinge visibly loose and causing it to limp badly. The automaton looks like it could be repaired with the right tool." Cogsworth can be repaired or broken. Cogsworth is broken.
 Understand "automaton" or "tinkerer" or "clockwork automaton" or "small automaton" or "clockwork tinkerer" or "robot" or "mechanical man" or "clockwork" as Cogsworth.
+The description of Cogsworth is "A helpful-looking clockwork automaton that appears to be a tinkerer or engineer. Its right leg hinge is visibly damaged and loose, causing it to move with difficulty. A wrench would probably fix that problem easily. Despite its condition, it has the look of someone who might know useful information about this place."
 
 The lift-code is a number that varies. The lift-code is 0.
+
+Instead of speaking to Cogsworth when Cogsworth is broken:
+	say "The automaton makes grinding noises and gestures weakly at its damaged leg. It seems to be trying to communicate but can't function properly with its broken hinge. If you could repair it, it might be able to help you."
 
 After giving the heavy wrench to Cogsworth when Cogsworth is broken:
 	now Cogsworth is repaired;
 	now lift-code is 472;
 	now the player is lift-code-aware;
 	increase the score by 5;
-	say "You hand the wrench to Cogsworth. He tightens his leg hinge with a few clicks, stands upright, and says, 'The code for the workshop lift is 472.' [bracket]+5[close bracket]".
+	say "You hand the wrench to Cogsworth. He tightens his leg hinge with a few clicks, stands upright, and says, 'Thank you! I'm much better now. As a token of gratitude, here's something useful: the code for the workshop lift is 472.' [bracket]+5[close bracket]".
 
 
 After giving the heavy wrench to Cogsworth when Cogsworth is repaired:
@@ -166,7 +170,7 @@ Instead of entering the elevator hatch when the elevator hatch is open: try goin
 	
 [Level 2: Workshop - Changed from single room to multiple rooms]
 
-The Storage Area is east of Workshop. "This cluttered space houses spare parts, tools, and maintenance supplies. Metal shelves line the walls, packed with components and engineering materials. A heavy tool chest sits against the far wall. The main workshop lies to the west."
+The Storage Area is east of Workshop. "This cluttered space houses spare parts, tools, and maintenance supplies. Metal shelves line the walls, packed with components and engineering materials. A heavy tool chest sits against the far wall. [if the steam pipe is leaking]The Chief Engineer, Marigold, is here suffering from the dangerous steam leak.[otherwise]The Chief Engineer, Marigold, is here working peacefully now that the steam problem is resolved.[end if] The main workshop lies to the west."
 
 The metal shelves are scenery in Storage Area. "Sturdy steel shelving units line the walls, packed with an assortment of mechanical components, spare parts, and engineering materials. Every shelf appears to be completely full."
 Understand "shelves" or "shelf" or "steel shelves" or "shelving" or "steel shelving" or "shelving units" as the metal shelves.
@@ -276,7 +280,28 @@ Instead of fixing the steam pipe:
 
 Instead of putting the spare gasket on the steam pipe: try fixing the steam pipe.
 
-Understand "fix [something]" or "repair [something]" or "seal [something]" as fixing.
+Understand "use [something] on [something]" or "apply [something] to [something]" or "put [something] on [something]" or "attach [something] to [something]" or "install [something] on [something]" as putting it on.
+
+Instead of putting the spare gasket on the steam pipe: try fixing the steam pipe.
+
+Understand "patch [something] with [something]" or "seal [something] with [something]" or "fix [something] with [something]" or "repair [something] with [something]" or "mend [something] with [something]" or "plug [something] with [something]" or "use [something] and [something] to [text]" as repairing it with.
+Repairing it with is an action applying to two things.
+
+Check repairing it with:
+	if the noun is not the steam pipe:
+		say "That doesn't need repairing with anything." instead;
+	if the second noun is the heavy wrench:
+		say "A wrench won't help seal a pipe leak. You need something to plug the crack - perhaps a gasket or seal of some kind." instead;
+	if the second noun is not the spare gasket:
+		say "That won't help repair the pipe." instead.
+
+Carry out repairing it with:
+	try fixing the steam pipe.
+
+Instead of using the spare gasket when the steam pipe is in the location:
+	try fixing the steam pipe.
+
+Understand "fix [something]" or "repair [something]" or "seal [something]" or "patch [something]" or "mend [something]" or "use [something] on [something]" or "apply [something] to [something]" or "attach [something] to [something]" or "install [something] on [something]" or "plug [something] with [something]" as fixing.
 Fixing is an action applying to one thing.
 
 Check fixing:
@@ -299,12 +324,12 @@ A tool chest is a container in the Storage Area. It is closed and openable. "A h
 The description is "A large, industrial-strength chest for storing workshop tools."
 Understand "chest" or "heavy chest" or "tool box" or "industrial chest" or "storage chest" as the tool chest.
 
-Marigold is a woman in the Storage Area. "A woman in grease-stained overalls crouches [if the steam pipe is leaking]behind the tool chest, coughing[otherwise]by the tool chest, examining some components[end if]."
-The description is "A tough-looking woman with practical overalls and calloused hands. A patch on her jacket identifies her as 'Marigold, Chief Engineer'."
+Marigold is a woman in the Storage Area. "A woman in grease-stained overalls crouches [if the steam pipe is leaking]behind the tool chest, coughing violently from the scalding steam filling the area. She looks like she's in distress and would be very grateful if someone could stop the steam leak[otherwise]by the tool chest, examining some components with a relieved expression[end if]."
+The description is "A tough-looking woman with practical overalls and calloused hands. A patch on her jacket identifies her as 'Marigold, Chief Engineer'. [if the steam pipe is leaking]She's clearly suffering from the steam and keeps glancing toward the Workshop where the broken pipe is located. She looks like someone who would reward whoever fixes that dangerous steam leak.[otherwise]She seems much more comfortable now that the steam problem has been resolved. As the Chief Engineer, she probably knows useful information about this facility.[end if]"
 Understand "woman" or "engineer" or "chief engineer" or "worker" or "mechanic" as Marigold.
 
 After fixing the steam pipe when Marigold is in the Storage Area and the steam pipe is in Workshop:
-	say "Word seems to travel fast. Marigold stands up straight in the Storage Area, her coughing subsiding. 'Thank you for that! I was afraid the whole level would fill with steam. That pipe's been troublesome for weeks.'";
+	say "Word seems to travel fast. Marigold stands up straight in the Storage Area, her coughing subsiding. 'Thank you for that! I was afraid the whole level would fill with steam. That pipe's been troublesome for weeks. I owe you one - ask me for help if you need anything.'";
 	now Marigold carries the pocket watch.
 
 The pocket watch is a thing.
@@ -314,6 +339,9 @@ Understand "watch" or "brass watch" or "pocket watch" or "timepiece" or "clock" 
 After examining the pocket watch:
 	now the player is lift-code-aware;
 	say "You notice the numbers '472' delicately engraved inside the cover. That looks like it could be important."
+
+Instead of speaking to Marigold when the steam pipe is leaking:
+	say "Marigold coughs violently and can barely speak through the scalding steam. 'Can't... *cough*... work like this!' she gasps, pointing toward the Workshop. 'That steam pipe... *cough*... needs fixing badly! Someone with the right supplies could patch it up!' She looks at you hopefully."
 
 Instead of asking Marigold about "help" when Marigold carries the pocket watch:
 	now the player carries the pocket watch;

@@ -82,86 +82,153 @@ def get_score_change(text: str) -> int:
     return 0
 
 
-scratchpad = {}
+THREAD_ID = None
 
 
-def get_scratchpad_key() -> str:
-    """
-    Get the key for the scratchpad for a specific game.
-    """
-    return f"scratchpad:{GAME}"
+def get_general_notes_key(thread_id: str) -> str:
+    """Get the key for general game notes for a specific thread and game."""
+    return f"notes:{thread_id}:{GAME}"
 
 
-@tool
-def read_scratchpad() -> dict[str, str]:
-    """
-    Read the contents of your scratchpad. These are notes you've taken to
-    remember things about the game as you play it, including a map of the
-    rooms you've visited.
-    """
-    logger.info("Reading scratchpad")
-    key_ = get_scratchpad_key()
-    return redis_client.json().get(key_) or {}  # type: ignore
+def get_room_memory_key(thread_id: str, room_name: str) -> str:
+    """Get the key for room-specific memory for a specific thread, game, and room."""
+    return f"room_memory:{thread_id}:{GAME}:{room_name}"
 
 
 @tool
-def update_scratchpad(contents: dict[str, Any]):
+def read_general_notes() -> dict[str, Any]:
     """
-    Replace the contents of your scratchpad. These are notes you're taking to
-    remember things about the game as you play it. Updating your scratchpad
-    replaces the previous contents of the scratchpad, so include all the items
-    you want to remember.
+    Read your general notes for this game session. These are notes about your
+    overall strategy, goals, questions you're trying to answer, and high-level
+    observations that apply across the entire game.
 
-    Use your scratchpad:
-    1. To keep track of the rooms you've visited, including their exits, and
-       any objects you've seen. Use a "map" key to store this map of the rooms
-       you've visited.
-    2. Your reflections on the outcome of your last move and what it could mean
-       for your strategy.
+    Use this to store:
+    - Your current goals and objectives
+    - Questions you're trying to answer
+    - Overall strategy and approach
+    - Items you're carrying or looking for
+    - General observations about the game mechanics
+    """
+    if THREAD_ID is None:
+        raise ValueError("Thread ID not set")
+    key = get_general_notes_key(THREAD_ID)
+    return redis_client.json().get(key) or {}
 
-    For example:
 
-    update_scratchpad(
-        contents={
-            "map": {
-                "Living Room": {
-                    "description": "A cozy room with a fireplace",
-                    "exits": {
-                    "north": "Kitchen",
-                    "east": "Hallway",
-                    "down": "Basement"
-                },
-                "objects": ["sofa", "lamp"]
-            },
-            "Kitchen": {
-                "description": "A small kitchen with granite countertops",
-                "exits": {
-                        "south": "Living Room",
-                        "west": "Pantry",
-                    },
-                    "objects": ["knife", "apple"],
-                },
-            },
-        },
-        "reflections": [
-            "The silver key did not open the door in the kitchen. I should try
-            to find a different key to open the door in the kitchen.",
-            "I should take the knife in case I can use it later.",
+@tool
+def update_general_notes(contents: dict[str, Any]):
+    """
+    Update your general notes for this game session. These are notes about your
+    overall strategy, goals, questions you're trying to answer, and high-level
+    observations that apply across the entire game.
+
+    Use this to store:
+    - Your current goals and objectives
+    - Questions you're trying to answer
+    - Overall strategy and approach
+    - Items you're carrying or looking for
+    - General observations about the game mechanics
+
+    Example:
+    update_general_notes({
+        "current_goals": [
+            "Find the silver key to unlock the kitchen door",
+            "Explore the basement for the treasure"
         ],
-    )
-
-    *IMPORTANT*: Your input should be JSON and should have a "contents" key that
-    contains an object with the keys you want to set in the scratchpad.
+        "questions": [
+            "What is the purpose of the strange device in the attic?",
+            "How do I activate the magical portal?"
+        ],
+        "strategy": "Explore systematically, north to south, collecting all items",
+        "inventory": ["rusty key", "wooden sword", "magic potion"],
+        "observations": [
+            "Doors require specific keys - keys are not universal",
+            "Some NPCs give hints if you ask the right questions"
+        ]
+    })
     """
-    key = get_scratchpad_key()
-    # TODO: Partial updates
-    logger.info("Updating scratchpad: %s", contents)
+    if THREAD_ID is None:
+        raise ValueError("Thread ID not set")
+    key = get_general_notes_key(THREAD_ID)
+    logger.info("Updating general notes: %s", contents)
     redis_client.json().set(key, "$", contents)
 
 
+@tool
+def get_room_memory(room_name: str) -> str:
+    """
+    Get your memory for a specific room. Call this when you enter a room to
+    recall what you've learned about it in previous visits.
+
+    The room memory is a natural language scratchpad containing:
+    - Room description and layout
+    - Exits and where they lead
+    - Objects present in the room
+    - NPCs in the room and their behavior
+    - Actions you've tried and their results
+    - Any puzzles or mechanisms in the room
+
+    Args:
+        room_name: The name of the room (e.g., "Kitchen", "Living Room")
+
+    Returns:
+        A string containing your notes about this room, or empty string if no memory exists
+    """
+    if THREAD_ID is None:
+        raise ValueError("Thread ID not set")
+    key = get_room_memory_key(THREAD_ID, room_name)
+    memory = redis_client.get(key)
+    return memory.decode() if memory else ""
+
+
+@tool
+def update_room_memory(room_name: str, memory: str):
+    """
+    Update your memory for a specific room. Call this after taking actions in
+    a room to record what you've learned.
+
+    Store information about:
+    - Room description and layout
+    - Exits and where they lead
+    - Objects present in the room (and their states)
+    - NPCs in the room and their behavior
+    - Actions you've tried and their results
+    - Any puzzles or mechanisms in the room
+    - Changes that occur in the room over time
+
+    Args:
+        room_name: The name of the room (e.g., "Kitchen", "Living Room")
+        memory: String containing your notes about this room
+
+    Example:
+    update_room_memory("Kitchen", '''
+    KITCHEN
+    Description: Small kitchen with granite countertops and a locked door
+    Exits: south to Living Room, west to Pantry
+    Objects:
+    - knife: sharp kitchen knife (taken)
+    - apple: red apple still on counter
+    - locked door: needs silver key, rusty key did not work
+    Actions tried:
+    - use rusty key on door: failed
+    - take knife: success
+    - examine countertops: found nothing
+    Puzzles: door requires silver key
+    Last visited: turn 15
+    ''')
+    """
+    if THREAD_ID is None:
+        raise ValueError("Thread ID not set")
+    key = get_room_memory_key(THREAD_ID, room_name)
+    logger.info("Updating room memory for %s: %s", room_name, memory)
+    redis_client.set(key, memory)
+
+
 TOOLS = {
-    "read_scratchpad": read_scratchpad,
-    "update_scratchpad": update_scratchpad,
+    "read_general_notes": read_general_notes,
+    "update_general_notes": update_general_notes,
+    "get_room_memory": get_room_memory,
+    "update_room_memory": update_room_memory,
 }
 
 
@@ -219,9 +286,12 @@ def generate_next_command(state: Dict, config: RunnableConfig) -> Dict:
         observation and generate the next command. Return only the command,
         nothing else. Do not wrap the command in quotes.
         
-        Use your scratchpad tools to keep track of any information you need to
-        remember. ALWAYS use the scratchpad tool to keep track of the rooms
-        you've explored.
+        Use your memory tools to keep track of any information you need to
+        remember:
+        - Use get_room_memory() when you enter a room to recall what you know
+        - Use update_room_memory() after actions to record new information
+        - Use read_general_notes() and update_general_notes() for strategy and goals
+        ALWAYS use these tools to maintain your understanding of the game.
         
         <starting_text>
         The starting text of the game:
@@ -507,6 +577,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
     thread_id = args.thread_id
 
+    # Set the global THREAD_ID for the tools
+    THREAD_ID = thread_id
+
     env_id = textworld.gym.register_game(
         args.game_path, max_episode_steps=MAX_STEPS
     )  # TextWorld's count is sometimes different than ours
@@ -550,7 +623,14 @@ if __name__ == "__main__":
         "plan": "",
         "llm": ChatOpenAI(
             model=args.model,
-        ).bind_tools([read_scratchpad, update_scratchpad]),
+        ).bind_tools(
+            [
+                read_general_notes,
+                update_general_notes,
+                get_room_memory,
+                update_room_memory,
+            ]
+        ),
         "turn": 0,
         "start": datetime.datetime.now(),
         "end_time": None,
@@ -558,11 +638,12 @@ if __name__ == "__main__":
         "game_outcome": "",
     }
 
+    # Set the global GAME for the tools
     GAME = args.game_path
 
     conf = RunnableConfig(
         configurable={"thread_id": thread_id},
-        recursion_limit=1000,
+        recursion_limit=MAX_STEPS * 3,
     )
 
     print(text)
