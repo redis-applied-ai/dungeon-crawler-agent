@@ -9,7 +9,13 @@
       "Bash(rg:*)",
       "Bash(ls:*)",
       "Bash(python:*)",
-      "Bash(/Applications/Inform 7.app/Contents/MacOS/Inform 7:*)"
+      "Bash(/Applications/Inform 7.app/Contents/MacOS/Inform 7:*)",
+      "Bash(mkdir:*)",
+      "Bash(chmod:*)",
+      "Bash(MAX_STEPS=25 python src/play.py --game-path games/dungeon.ulx --model gpt-4 --thread test-debug)",
+      "Bash(redis-cli:*)",
+      "Bash(MAX_STEPS=5 uv run python src/play.py --thread-id test-direct --game-path games/dungeon.ulx --model gpt-4)",
+      "Bash(docker run:*)"
     ],
     "deny": []
   }
