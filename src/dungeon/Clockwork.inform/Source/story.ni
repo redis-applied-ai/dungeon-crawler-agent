@@ -284,7 +284,7 @@ Understand "use [something] on [something]" or "apply [something] to [something]
 
 Instead of putting the spare gasket on the steam pipe: try fixing the steam pipe.
 
-Understand "patch [something] with [something]" or "seal [something] with [something]" or "fix [something] with [something]" or "repair [something] with [something]" or "mend [something] with [something]" or "plug [something] with [something]" or "use [something] and [something] to [text]" as repairing it with.
+Understand "patch [something] with [something]" or "seal [something] with [something]" or "fix [something] with [something]" or "repair [something] with [something]" or "mend [something] with [something]" or "plug [something] with [something]" as repairing it with.
 Repairing it with is an action applying to two things.
 
 Check repairing it with:
@@ -298,10 +298,8 @@ Check repairing it with:
 Carry out repairing it with:
 	try fixing the steam pipe.
 
-Instead of using the spare gasket when the steam pipe is in the location:
-	try fixing the steam pipe.
 
-Understand "fix [something]" or "repair [something]" or "seal [something]" or "patch [something]" or "mend [something]" or "use [something] on [something]" or "apply [something] to [something]" or "attach [something] to [something]" or "install [something] on [something]" or "plug [something] with [something]" as fixing.
+Understand "fix [something]" or "repair [something]" or "seal [something]" or "patch [something]" or "mend [something]" as fixing.
 Fixing is an action applying to one thing.
 
 Check fixing:
@@ -325,7 +323,7 @@ The description is "A large, industrial-strength chest for storing workshop tool
 Understand "chest" or "heavy chest" or "tool box" or "industrial chest" or "storage chest" as the tool chest.
 
 Marigold is a woman in the Storage Area. "A woman in grease-stained overalls crouches [if the steam pipe is leaking]behind the tool chest, coughing violently from the scalding steam filling the area. She looks like she's in distress and would be very grateful if someone could stop the steam leak[otherwise]by the tool chest, examining some components with a relieved expression[end if]."
-The description is "A tough-looking woman with practical overalls and calloused hands. A patch on her jacket identifies her as 'Marigold, Chief Engineer'. [if the steam pipe is leaking]She's clearly suffering from the steam and keeps glancing toward the Workshop where the broken pipe is located. She looks like someone who would reward whoever fixes that dangerous steam leak.[otherwise]She seems much more comfortable now that the steam problem has been resolved. As the Chief Engineer, she probably knows useful information about this facility.[end if]"
+The description is "A tough-looking woman with practical overalls and calloused hands. A patch on her jacket identifies her as 'Marigold, Chief Engineer'. [if the steam pipe is leaking]She's clearly suffering from the steam and keeps glancing toward the Workshop where the broken pipe is located. She looks like someone who would reward whoever fixes that dangerous steam leak.[otherwise]She seems much more comfortable now that the steam problem has been resolved. As the Chief Engineer, she probably knows useful information about this facility.[end if]".
 Understand "woman" or "engineer" or "chief engineer" or "worker" or "mechanic" as Marigold.
 
 After fixing the steam pipe when Marigold is in the Storage Area and the steam pipe is in Workshop:
