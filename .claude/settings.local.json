@@ -15,7 +15,15 @@
       "Bash(MAX_STEPS=25 python src/play.py --game-path games/dungeon.ulx --model gpt-4 --thread test-debug)",
       "Bash(redis-cli:*)",
       "Bash(MAX_STEPS=5 uv run python src/play.py --thread-id test-direct --game-path games/dungeon.ulx --model gpt-4)",
-      "Bash(docker run:*)"
+      "Bash(docker run:*)",
+      "Bash(source:*)",
+      "Bash(MAX_STEPS=10 python play.py --game-path ../games/dungeon.ulx --model o3-mini --thread astm-test-2)",
+      "Bash(MAX_STEPS=10 python play.py --game-path ../games/dungeon.ulx --model o3-mini --thread astm-test-3)",
+      "Bash(MAX_STEPS=10 python play.py --game-path ../games/dungeon.ulx --model o3-mini --thread astm-test-4)",
+      "Bash(MAX_STEPS=10 python play.py --game-path ../games/dungeon.ulx --model o3-mini --thread astm-test-5)",
+      "Bash(MAX_STEPS=10 python play.py --game-path ../games/dungeon.ulx --model o3-mini --thread astm-test-6)",
+      "Bash(MAX_STEPS=3 python play.py --game-path ../games/dungeon.ulx --model o3-mini --thread astm-test-7)",
+      "Bash(MAX_STEPS=3 LOG_LEVEL=INFO uv run python src/play.py --game-path games/dungeon.ulx --model o3-mini --thread debug-test --clear-memory)"
     ],
     "deny": []
   }

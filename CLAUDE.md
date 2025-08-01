@@ -2,6 +2,8 @@
 
 An AI agent that plays interactive fiction games built with Inform 7, specifically designed to test and improve text-based game interactions using TextWorld.
 
+IMPORTANT: ALWAYS USE THE VIRTUALENV AT .venv WHEN RUNNING COMMANDS
+
 ## Project Overview
 
 This project combines:

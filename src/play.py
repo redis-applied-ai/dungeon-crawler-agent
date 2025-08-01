@@ -3,7 +3,11 @@ import datetime
 import logging
 import os
 import re
+import sys
 from typing import Any, Dict
+
+# Add src directory to path for ASTM imports
+sys.path.insert(0, os.path.dirname(__file__))
 
 import textworld.gym
 import dotenv
@@ -16,6 +20,8 @@ from langchain_core.messages import HumanMessage, ToolMessage, BaseMessage
 from langchain_core.tools import tool
 
 from redis import Redis
+from astm.astm_agent import ASTMAgent
+from feedback_trimmer import process_feedback_for_storage
 
 
 dotenv.load_dotenv()
@@ -41,9 +47,13 @@ class State(MessagesState):
     start: datetime.datetime
     end_time: datetime.datetime | None
     current_level: int
+    # ASTM-related fields that need state persistence
+    previous_obs: str | None
+    previous_command: str | None
+    astm_prediction: Any | None
 
 
-MAX_FEEDBACK_ITEMS = 20
+MAX_FEEDBACK_ITEMS = 5  # More aggressive trimming
 
 
 logging.basicConfig(level=LOG_LEVEL)
@@ -83,6 +93,7 @@ def get_score_change(text: str) -> int:
 
 
 THREAD_ID = None
+ASTM_AGENT = None
 
 
 def get_general_notes_key(thread_id: str) -> str:
@@ -182,6 +193,41 @@ def get_room_memory(room_name: str) -> str:
 
 
 @tool
+def get_astm_prediction(proposed_action: str) -> str:
+    """
+    Get a prediction from the ASTM system about what will happen if you take the proposed action.
+    This uses the symbolic transition model learned from past experience.
+
+    Args:
+        proposed_action: The action you're considering (e.g., "go north", "use key on door")
+
+    Returns:
+        A natural language explanation of the predicted outcome with confidence level
+    """
+    if THREAD_ID is None or ASTM_AGENT is None:
+        return "ASTM system not available"
+
+    try:
+        current_state = _get_current_state()
+        if current_state and hasattr(current_state, "obs"):
+            prediction = ASTM_AGENT.get_action_prediction(
+                current_state.obs, proposed_action
+            )
+            return prediction.to_natural_language()
+        else:
+            return "Unable to access current game state"
+    except Exception as e:
+        logger.error(f"Error getting ASTM prediction: {e}")
+        return f"Error getting prediction: {str(e)}"
+
+
+def _get_current_state():
+    """Helper to get current state - this is a hack for the tool system"""
+    # This is set by the generate_next_command function
+    return getattr(_get_current_state, "_current_state", None)
+
+
+@tool
 def update_room_memory(room_name: str, memory: str):
     """
     Update your memory for a specific room. Call this after taking actions in
@@ -229,6 +275,7 @@ TOOLS = {
     "update_general_notes": update_general_notes,
     "get_room_memory": get_room_memory,
     "update_room_memory": update_room_memory,
+    "get_astm_prediction": get_astm_prediction,
 }
 
 
@@ -268,8 +315,13 @@ def plan_strategy(state: Dict, config: RunnableConfig) -> Dict:
 
 def generate_next_command(state: Dict, config: RunnableConfig) -> Dict:
     """
-    Use the LLM to generate the next command.
+    Use the LLM to generate the next command, enhanced with ASTM predictions.
     """
+    # Set current state for the tool system
+    _get_current_state._current_state = state
+
+    # ASTM processing moved to game_step to ensure proper command tracking
+
     past_feedback = (
         f"""
     <past_feedback>
@@ -281,16 +333,42 @@ def generate_next_command(state: Dict, config: RunnableConfig) -> Dict:
         else ""
     )
 
+    # Add ASTM model summary if available
+    astm_info = ""
+    if ASTM_AGENT:
+        try:
+            model_summary = ASTM_AGENT.get_model_summary()
+            exploration_suggestions = ASTM_AGENT.suggest_exploration_actions(
+                state["obs"]
+            )
+            astm_info = f"""
+    <astm_model>
+        Your learned transition model:
+        {model_summary}
+        
+        Exploration suggestions based on limited knowledge:
+        {", ".join(exploration_suggestions) if exploration_suggestions else "None"}
+    </astm_model>
+    """
+        except Exception as e:
+            logger.error(f"Failed to get ASTM info: {e}")
+
     prompt = f"""
         You are playing a text-based adventure game. Read the current
         observation and generate the next command. Return only the command,
         nothing else. Do not wrap the command in quotes.
+        
+        IMPORTANT: You have access to a predictive model (ASTM) that learns
+        from your actions. Use get_astm_prediction(action) to predict outcomes
+        before taking actions. This can help you avoid repeated mistakes and
+        make better decisions.
         
         Use your memory tools to keep track of any information you need to
         remember:
         - Use get_room_memory() when you enter a room to recall what you know
         - Use update_room_memory() after actions to record new information
         - Use read_general_notes() and update_general_notes() for strategy and goals
+        - Use get_astm_prediction(action) to predict what will happen from actions
         ALWAYS use these tools to maintain your understanding of the game.
         
         <starting_text>
@@ -309,6 +387,8 @@ def generate_next_command(state: Dict, config: RunnableConfig) -> Dict:
         </history>
         
         {past_feedback}
+        
+        {astm_info}
         
         The current observation is:
         {state["obs"]}
@@ -378,6 +458,18 @@ def game_step(state: Dict) -> Dict:
     """
     Execute the generated command in the game environment.
     """
+    # Store previous observation and command for ASTM
+    state["previous_obs"] = state.get("obs", "")
+    previous_command = state.get("previous_command")
+    
+    # Debug: log state contents
+    logger.info(f"DEBUG: state keys: {list(state.keys())}")
+    logger.info(f"DEBUG: raw previous_command from state: {repr(state.get('previous_command'))}")
+    
+    # Handle potential serialization issues where None becomes "None"
+    if previous_command == "None" or previous_command is None:
+        previous_command = None
+
     command = state["command"]
     obs, reward, done, infos = env.step(command)
     logger.debug(
@@ -394,6 +486,49 @@ def game_step(state: Dict) -> Dict:
     state["done"] = done
     state["moves"] += 1
     state["history"].append(f"{command.strip('\n')}: {obs.strip('\n')}")
+
+    # ASTM processing - now that we have the actual game step results
+    logger.info(f"DEBUG: previous_command='{previous_command}', ASTM_AGENT={ASTM_AGENT is not None}")
+    if ASTM_AGENT and previous_command:
+        try:
+            # Process the turn with the executed command and current observation
+            # This allows ASTM to generate rules from: previous_state + executed_action -> current_state
+            logger.info(f"ASTM processing turn with executed_action: '{previous_command}'")
+            astm_result = ASTM_AGENT.process_turn(
+                observation=obs,
+                feedback=text,  # Use full game text as feedback
+                executed_action=previous_command  # The action that was just executed
+            )
+            
+            logger.info(f"ASTM processed turn: {astm_result['new_rules_generated']} new rules generated")
+            if astm_result['new_rules_generated'] > 0:
+                logger.info(f"ASTM model stats: {astm_result['model_stats']}")
+                
+        except Exception as e:
+            logger.error(f"ASTM processing failed: {e}")
+    elif ASTM_AGENT and not previous_command:
+        logger.info("ASTM: No previous command to generate rules from")
+    elif not ASTM_AGENT:
+        logger.info("ASTM: ASTM_AGENT is None")
+    
+    # Store the executed command for the next turn
+    state["previous_command"] = command
+    logger.info(f"Stored previous_command: '{command}' for next turn")
+
+    # Validate ASTM prediction if we have one
+    if ASTM_AGENT and "astm_prediction" in state and state["astm_prediction"]:
+        try:
+            validation_result = ASTM_AGENT.validate_prediction(
+                state["astm_prediction"], obs
+            )
+            logger.info(
+                f"ASTM prediction accuracy: {validation_result['prediction_accuracy']:.2f}"
+            )
+        except Exception as e:
+            logger.error(f"ASTM validation failed: {e}")
+
+        # Clear the prediction
+        state["astm_prediction"] = None
 
     # The game doesn't always keep track of the turn number correctly.
     if state["moves"] >= MAX_STEPS:
@@ -470,12 +605,39 @@ def game_over(state: State, config: RunnableConfig) -> State:
 
     llm = state["llm"]
     response = llm.invoke(prompt)
-    new_feedback = str(response.content).strip()
+    raw_feedback = str(response.content).strip()
 
-    print("My feedback on the game: ", new_feedback)
+    print("My feedback on the game: ", raw_feedback)
 
-    # Format the feedback entry with the outcome
-    feedback_entry = f"""
+    # Get existing feedback history for context
+    existing_history = redis_client.lrange(key, 0, -1)
+    existing_history = [item.decode() for item in existing_history if item is not None] if existing_history else []
+
+    # Process feedback through the trimming system
+    try:
+        trimmed_entry = process_feedback_for_storage(
+            raw_feedback=raw_feedback,
+            plan=state["plan"],
+            outcome=state["game_outcome"], 
+            llm=llm,
+            existing_history=existing_history
+        )
+        
+        # Format the feedback entry with trimmed content
+        feedback_entry = f"""
+    <game_date>
+    {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+    </game_date>
+    
+    {trimmed_entry}
+    """
+        
+        print("\nTrimmed feedback stored:", trimmed_entry)
+        
+    except Exception as e:
+        logger.error(f"Failed to trim feedback: {e}")
+        # Fallback to original feedback if trimming fails
+        feedback_entry = f"""
     <game_date>
     {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
     </game_date>
@@ -489,35 +651,57 @@ def game_over(state: State, config: RunnableConfig) -> State:
     </game_outcome>
 
     <game_feedback>
-    {new_feedback}
+    {raw_feedback}
     </game_feedback>
     """
 
-    # If there are too many feedback items, summarize the oldest ones and add
-    # the summary to the list.
+    # If there are too many feedback items, consolidate the oldest ones
     feedback_count = redis_client.llen(key)
     if feedback_count >= MAX_FEEDBACK_ITEMS:  # type: ignore
         feedback_items = redis_client.lrange(key, 0, -1)
         feedback_items = [item.decode() for item in feedback_items if item is not None]  # type: ignore
-        old_feedback = "\n".join(feedback_items)
-
+        
+        # Use more aggressive consolidation for trimmed feedback
         prompt = f"""
-        Summarize the following feedback about your performance in a game. This
-        feedback was gathered from previous games you played. Capture only
-        information useful for future games. Be sure to preserve information
-        about which actions led to wins and which led to losses.
+        Consolidate the following game feedback into 3 key points:
+        1. Commands that consistently work
+        2. Commands that consistently fail  
+        3. Most critical insights for winning
+        
+        Keep each point under 100 characters. Focus only on actionable patterns.
 
-        <feedback_to_summarize>
-        Your previous feedback:
-        {old_feedback}
-        </feedback_to_summarize>
+        <feedback_to_consolidate>
+        {chr(10).join(feedback_items)}
+        </feedback_to_consolidate>
 
-        Summary of feedback:
+        Consolidated insights (3 bullet points max):
         """
         response = state["llm"].invoke(prompt)
-        old_feedback_summary = str(response.content).strip()
+        consolidated_summary = str(response.content).strip()
+        
+        # Keep only the consolidated summary and the most recent few items
         redis_client.delete(key)
-        redis_client.rpush(key, old_feedback_summary)
+        
+        # Store consolidated summary
+        summary_entry = f"""
+    <game_date>
+    CONSOLIDATED-{datetime.datetime.now().strftime("%Y-%m-%d")}
+    </game_date>
+    
+    <game_outcome>
+    summary
+    </game_outcome>
+    
+    <actionable_feedback>
+    {consolidated_summary}
+    </actionable_feedback>
+    """
+        redis_client.rpush(key, summary_entry)
+        
+        # Keep the 3 most recent individual entries
+        recent_items = feedback_items[-3:]
+        for item in recent_items:
+            redis_client.rpush(key, item)
 
     # Add the latest feedback to the list.
     redis_client.rpush(key, feedback_entry)
@@ -568,6 +752,12 @@ if __name__ == "__main__":
         help="The model to use for the game",
     )
     parser.add_argument(
+        "--astm-model",
+        type=str,
+        default="gpt-4.1-mini",
+        help="The model to use for the ASTM agent",
+    )
+    parser.add_argument(
         "--clear-memory",
         action="store_true",
         default=False,
@@ -575,10 +765,9 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    thread_id = args.thread_id
 
-    # Set the global THREAD_ID for the tools
-    THREAD_ID = thread_id
+    # Set the global variables for the tools
+    THREAD_ID = args.thread_id
 
     env_id = textworld.gym.register_game(
         args.game_path, max_episode_steps=MAX_STEPS
@@ -588,12 +777,12 @@ if __name__ == "__main__":
     text = env.render(mode="text")
 
     if args.clear_memory:
-        redis_client.delete(game_feedback_key(thread_id))
+        redis_client.delete(game_feedback_key(THREAD_ID))
         print("Cleared memory of past games")
         past_feedback = ""
     else:
         past_feedback_items = (
-            redis_client.lrange(game_feedback_key(thread_id), 0, -1) or []
+            redis_client.lrange(game_feedback_key(THREAD_ID), 0, -1) or []
         )
         formatted_items = []
 
@@ -629,6 +818,7 @@ if __name__ == "__main__":
                 update_general_notes,
                 get_room_memory,
                 update_room_memory,
+                get_astm_prediction,
             ]
         ),
         "turn": 0,
@@ -636,13 +826,32 @@ if __name__ == "__main__":
         "end_time": None,
         "level": 1,
         "game_outcome": "",
+        "previous_obs": None,
+        "previous_command": None,
+        "astm_prediction": None,
     }
 
     # Set the global GAME for the tools
     GAME = args.game_path
 
+    # Initialize ASTM agent as global
+    try:
+        ASTM_AGENT = ASTMAgent(
+            redis_client=redis_client,
+            thread_id=THREAD_ID,
+            game_path=args.game_path,
+            llm=ChatOpenAI(model=args.model),
+        )
+        print(
+            f"<ASTM> Initialized with existing model: {ASTM_AGENT.get_model_summary()}"
+        )
+    except Exception as e:
+        logger.error(f"Failed to initialize ASTM agent: {e}")
+        print(f"<ASTM> Warning: Failed to initialize ASTM system: {e}")
+        ASTM_AGENT = None
+
     conf = RunnableConfig(
-        configurable={"thread_id": thread_id},
+        configurable={"thread_id": THREAD_ID},
         recursion_limit=MAX_STEPS * 3,
     )
 

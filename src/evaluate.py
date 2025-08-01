@@ -209,7 +209,8 @@ class GameRunner:
         # Clear general notes and room memories (pattern matching)
         pattern_keys = [
             f"notes:{thread_id}:*",
-            f"room_memory:{thread_id}:*"
+            f"room_memory:{thread_id}:*",
+            f"astm_model:{thread_id}:*"  # Clear ASTM models
         ]
         for pattern in pattern_keys:
             keys = self.redis_client.keys(pattern)
@@ -438,19 +439,60 @@ def create_preset_configs(model: str, game_path: str, base_thread_id: str) -> Li
     ]
 
 
+def create_astm_configs(model: str, game_path: str, base_thread_id: str) -> List[EvaluationConfig]:
+    """Create ASTM-specific evaluation configurations."""
+    return [
+        # Baseline: No memory or ASTM
+        EvaluationConfig(
+            name=f"baseline_no_astm_{model}",
+            model=model,
+            max_steps=75,  # More steps to see learning effects
+            num_runs=15,   # Fewer runs since ASTM takes more time
+            game_path=game_path,
+            memory_enabled=False,
+            clear_memory_between_runs=True,
+            base_thread_id=f"{base_thread_id}_no_astm"
+        ),
+        
+        # ASTM enabled, cleared between runs (fresh symbolic learning each time)
+        EvaluationConfig(
+            name=f"astm_fresh_{model}",
+            model=model,
+            max_steps=75,
+            num_runs=15,
+            game_path=game_path,
+            memory_enabled=True,  # ASTM is part of the memory system
+            clear_memory_between_runs=True,
+            base_thread_id=f"{base_thread_id}_astm_fresh"
+        ),
+        
+        # ASTM enabled, persistent across runs (cumulative learning)
+        EvaluationConfig(
+            name=f"astm_learning_{model}",
+            model=model,
+            max_steps=75,
+            num_runs=15,
+            game_path=game_path,
+            memory_enabled=True,
+            clear_memory_between_runs=False,
+            base_thread_id=f"{base_thread_id}_astm_learning"
+        )
+    ]
+
+
 def main():
     parser = argparse.ArgumentParser(description="Evaluate dungeon crawler agent performance")
     parser.add_argument("--model", type=str, default="o3-mini", 
                        help="Model to use for evaluation")
     parser.add_argument("--game-path", type=str, default="games/dungeon.ulx",
                        help="Path to the game file")
-    parser.add_argument("--max-steps", type=int, default=50,
+    parser.add_argument("--max-steps", type=int, default=None,
                        help="Maximum steps per game")
-    parser.add_argument("--num-runs", type=int, default=20,
+    parser.add_argument("--num-runs", type=int, default=None,
                        help="Number of runs per evaluation")
     parser.add_argument("--thread-id", type=str, default="eval",
                        help="Base thread ID for evaluation")
-    parser.add_argument("--preset", choices=["memory-comparison", "custom"], 
+    parser.add_argument("--preset", choices=["memory-comparison", "astm-evaluation", "custom"], 
                        default="memory-comparison",
                        help="Use preset configurations or custom")
     parser.add_argument("--memory-enabled", action="store_true", default=True,
@@ -461,14 +503,19 @@ def main():
     args = parser.parse_args()
     
     # Validate preset vs custom parameter conflicts
-    if args.preset == "memory-comparison":
+    if args.preset in ["memory-comparison", "astm-evaluation"]:
         conflicting_params = []
+        preset_config = {
+            "memory-comparison": {"max_steps": 50, "num_runs": 20},
+            "astm-evaluation": {"max_steps": 75, "num_runs": 15}
+        }
+        config = preset_config[args.preset]
         
         # Check if user overrode any preset defaults
-        if args.max_steps != 50:
-            conflicting_params.append(f"--max-steps {args.max_steps} (preset uses 50)")
-        if args.num_runs != 20:
-            conflicting_params.append(f"--num-runs {args.num_runs} (preset uses 20)")
+        if args.max_steps is not None and args.max_steps != config["max_steps"]:
+            conflicting_params.append(f"--max-steps {args.max_steps} (preset uses {config['max_steps']})")
+        if args.num_runs is not None and args.num_runs != config["num_runs"]:
+            conflicting_params.append(f"--num-runs {args.num_runs} (preset uses {config['num_runs']})")
         if args.thread_id != "eval":
             conflicting_params.append(f"--thread-id {args.thread_id} (preset uses eval_*)")
         if not args.memory_enabled:
@@ -477,9 +524,13 @@ def main():
             conflicting_params.append(f"--name {args.name} (preset generates names automatically)")
         
         if conflicting_params:
-            print("ERROR: Cannot use custom parameters with --preset memory-comparison")
-            print("The memory-comparison preset runs 3 evaluations with fixed configurations:")
-            print("  - 20 runs each, 50 steps max, automatic naming")
+            print(f"ERROR: Cannot use custom parameters with --preset {args.preset}")
+            if args.preset == "memory-comparison":
+                print("The memory-comparison preset runs 3 evaluations with fixed configurations:")
+                print("  - 20 runs each, 50 steps max, automatic naming")
+            else:  # astm-evaluation
+                print("The astm-evaluation preset runs 3 ASTM evaluations with fixed configurations:")
+                print("  - 15 runs each, 75 steps max, automatic naming")
             print("")
             print("Conflicting parameters detected:")
             for param in conflicting_params:
@@ -489,7 +540,7 @@ def main():
             print("  1. Use --preset custom to respect your custom parameters:")
             print(f"     python src/evaluate.py --preset custom --model {args.model} --num-runs {args.num_runs} --max-steps {args.max_steps}")
             print("  2. Remove conflicting parameters to use the preset as-is:")
-            print(f"     python src/evaluate.py --preset memory-comparison --model {args.model}")
+            print(f"     python src/evaluate.py --preset {args.preset} --model {args.model}")
             print("")
             sys.exit(1)
     
@@ -511,13 +562,30 @@ def main():
             evaluator.compare_evaluations(results[1], results[2])  # fresh vs learning memory
             evaluator.compare_evaluations(results[0], results[2])  # baseline vs learning memory
     
+    elif args.preset == "astm-evaluation":
+        # Run ASTM-specific evaluation
+        configs = create_astm_configs(args.model, args.game_path, args.thread_id)
+        results = []
+        
+        for config in configs:
+            result = evaluator.run_evaluation(config)
+            results.append(result)
+        
+        # Compare results
+        if len(results) >= 2:
+            print(f"\n{'='*60}")
+            print("=== ASTM SYSTEM EVALUATION RESULTS ===")
+            evaluator.compare_evaluations(results[0], results[1])  # baseline vs ASTM fresh
+            evaluator.compare_evaluations(results[1], results[2])  # ASTM fresh vs ASTM learning
+            evaluator.compare_evaluations(results[0], results[2])  # baseline vs ASTM learning
+    
     else:
-        # Custom evaluation
+        # Custom evaluation - use sensible defaults if not specified
         config = EvaluationConfig(
             name=args.name or f"custom_{args.model}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}",
             model=args.model,
-            max_steps=args.max_steps,
-            num_runs=args.num_runs,
+            max_steps=args.max_steps or 50,
+            num_runs=args.num_runs or 20,
             game_path=args.game_path,
             memory_enabled=args.memory_enabled,
             clear_memory_between_runs=False,

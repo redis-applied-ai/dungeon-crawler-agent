@@ -1,0 +1,407 @@
+{
+  "config": {
+    "name": "memory_fresh_gpt-4.1",
+    "model": "gpt-4.1",
+    "max_steps": 50,
+    "num_runs": 20,
+    "game_path": "games/dungeon.ulx",
+    "memory_enabled": true,
+    "clear_memory_between_runs": true,
+    "base_thread_id": "eval_fresh"
+  },
+  "results": [
+    {
+      "run_id": 1,
+      "outcome": "loss",
+      "score": 10,
+      "moves": 50,
+      "time_seconds": 56.39690709114075,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-001",
+      "timestamp": "2025-07-31T15:19:16.474940",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 2,
+      "outcome": "loss",
+      "score": 5,
+      "moves": 50,
+      "time_seconds": 45.10490584373474,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-002",
+      "timestamp": "2025-07-31T15:20:01.621983",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 3,
+      "outcome": "loss",
+      "score": 10,
+      "moves": 50,
+      "time_seconds": 56.613337993621826,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-003",
+      "timestamp": "2025-07-31T15:20:58.263964",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 4,
+      "outcome": "loss",
+      "score": 10,
+      "moves": 50,
+      "time_seconds": 49.922993898391724,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-004",
+      "timestamp": "2025-07-31T15:21:48.219457",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 5,
+      "outcome": "loss",
+      "score": 10,
+      "moves": 50,
+      "time_seconds": 47.83022904396057,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-005",
+      "timestamp": "2025-07-31T15:22:36.082422",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 6,
+      "outcome": "loss",
+      "score": 5,
+      "moves": 50,
+      "time_seconds": 49.16005873680115,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-006",
+      "timestamp": "2025-07-31T15:23:25.272063",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 7,
+      "outcome": "loss",
+      "score": 5,
+      "moves": 50,
+      "time_seconds": 57.78676414489746,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-007",
+      "timestamp": "2025-07-31T15:24:23.105193",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 1,
+        "room_memories_total_size": 785,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 8,
+      "outcome": "loss",
+      "score": 5,
+      "moves": 50,
+      "time_seconds": 61.15109610557556,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-008",
+      "timestamp": "2025-07-31T15:25:24.289889",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 0
+      }
+    },
+    {
+      "run_id": 9,
+      "outcome": "loss",
+      "score": 10,
+      "moves": 50,
+      "time_seconds": 43.21613693237305,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-009",
+      "timestamp": "2025-07-31T15:26:07.540236",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 10,
+      "outcome": "loss",
+      "score": 5,
+      "moves": 50,
+      "time_seconds": 47.49612879753113,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-010",
+      "timestamp": "2025-07-31T15:26:55.071060",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 11,
+      "outcome": "loss",
+      "score": 4,
+      "moves": 50,
+      "time_seconds": 41.182268142700195,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-011",
+      "timestamp": "2025-07-31T15:27:36.297424",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 12,
+      "outcome": "loss",
+      "score": 10,
+      "moves": 50,
+      "time_seconds": 70.11637210845947,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-012",
+      "timestamp": "2025-07-31T15:28:46.448843",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 13,
+      "outcome": "loss",
+      "score": 5,
+      "moves": 50,
+      "time_seconds": 50.739556074142456,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-013",
+      "timestamp": "2025-07-31T15:29:37.227273",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 14,
+      "outcome": "loss",
+      "score": 5,
+      "moves": 50,
+      "time_seconds": 49.3654351234436,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-014",
+      "timestamp": "2025-07-31T15:30:26.620408",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 15,
+      "outcome": "loss",
+      "score": 5,
+      "moves": 50,
+      "time_seconds": 52.19839572906494,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-015",
+      "timestamp": "2025-07-31T15:31:18.855748",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 1,
+        "room_memories_total_size": 740,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 16,
+      "outcome": "loss",
+      "score": 10,
+      "moves": 50,
+      "time_seconds": 49.59917593002319,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-016",
+      "timestamp": "2025-07-31T15:32:08.496156",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 17,
+      "outcome": "loss",
+      "score": 10,
+      "moves": 50,
+      "time_seconds": 47.6755530834198,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-017",
+      "timestamp": "2025-07-31T15:32:56.220951",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 18,
+      "outcome": "loss",
+      "score": 4,
+      "moves": 50,
+      "time_seconds": 48.389724016189575,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-018",
+      "timestamp": "2025-07-31T15:33:44.651072",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 19,
+      "outcome": "loss",
+      "score": 8,
+      "moves": 50,
+      "time_seconds": 56.55880808830261,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-019",
+      "timestamp": "2025-07-31T15:34:41.249481",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    },
+    {
+      "run_id": 20,
+      "outcome": "loss",
+      "score": 5,
+      "moves": 50,
+      "time_seconds": 44.70712661743164,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_fresh-run-020",
+      "timestamp": "2025-07-31T15:35:26.001282",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 1
+      }
+    }
+  ],
+  "summary": {
+    "win_rate": 0.0,
+    "avg_score": 7.05,
+    "avg_moves_to_win": 0,
+    "avg_time_seconds": 51.26054867506027,
+    "score_std": 2.584875035155166,
+    "moves_std": 0.0,
+    "total_runs": 20,
+    "wins": 0,
+    "losses": 20,
+    "timeouts": 0
+  },
+  "timestamp": "2025-07-31T15:35:26.001566"
+}
