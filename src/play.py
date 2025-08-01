@@ -82,10 +82,10 @@ def get_score_change(text: str) -> int:
     Get the score change from the game text.
 
     The game shows score changes like:
-    [+2 points] or [-1 point]
+    [+2 points] or [-1 point] or [+5]
     """
-    # Look for [+N points] or [-N points] pattern
-    score_change = re.findall(r"\[([+-]\d+) points?\]", text)
+    # Look for [+N points] or [-N points] or [+N] pattern
+    score_change = re.findall(r"\[([+-]\d+)(?: points?)?\]", text)
     if score_change:
         return int(score_change[0])
 

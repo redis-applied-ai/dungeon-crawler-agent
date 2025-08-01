@@ -1,0 +1,84 @@
+{
+  "config": {
+    "name": "custom_gpt-4.1_20250801_152856",
+    "model": "gpt-4.1",
+    "max_steps": 25,
+    "num_runs": 3,
+    "game_path": "games/dungeon.ulx",
+    "memory_enabled": true,
+    "clear_memory_between_runs": false,
+    "base_thread_id": "eval"
+  },
+  "results": [
+    {
+      "run_id": 1,
+      "outcome": "loss",
+      "score": 2,
+      "moves": 25,
+      "time_seconds": 120.76069211959839,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval-run-001",
+      "timestamp": "2025-08-01T15:30:57.633895",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 1,
+        "room_memories_total_size": 683,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 2,
+      "outcome": "loss",
+      "score": 1,
+      "moves": 25,
+      "time_seconds": 108.73688817024231,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval-run-002",
+      "timestamp": "2025-08-01T15:32:46.419864",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 2
+      }
+    },
+    {
+      "run_id": 3,
+      "outcome": "loss",
+      "score": 2,
+      "moves": 25,
+      "time_seconds": 102.69705510139465,
+      "memory_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval-run-003",
+      "timestamp": "2025-08-01T15:34:29.231571",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 1,
+        "room_memories_total_size": 640,
+        "feedback_entries": 1
+      }
+    }
+  ],
+  "summary": {
+    "win_rate": 0.0,
+    "avg_score": 1.6666666666666667,
+    "avg_moves_to_win": 0,
+    "avg_time_seconds": 110.73154513041179,
+    "score_std": 0.5773502691896257,
+    "moves_std": 0.0,
+    "total_runs": 3,
+    "wins": 0,
+    "losses": 3,
+    "timeouts": 0
+  },
+  "timestamp": "2025-08-01T15:34:29.232027"
+}
