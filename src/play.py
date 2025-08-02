@@ -30,6 +30,7 @@ dotenv.load_dotenv()
 GAME = None
 LOG_LEVEL = os.getenv("LOG_LEVEL", "WARNING")
 MAX_STEPS = int(os.getenv("MAX_STEPS", "400"))
+ASTM_ENABLED = os.getenv("ASTM_ENABLED", "true").lower() == "true"
 
 
 class State(MessagesState):
@@ -270,13 +271,15 @@ def update_room_memory(room_name: str, memory: str):
     redis_client.set(key, memory)
 
 
-TOOLS = {
-    "read_general_notes": read_general_notes,
-    "update_general_notes": update_general_notes,
-    "get_room_memory": get_room_memory,
-    "update_room_memory": update_room_memory,
-    "get_astm_prediction": get_astm_prediction,
-}
+# TOOLS = {
+# "read_general_notes": read_general_notes,
+# "update_general_notes": update_general_notes,
+# "get_room_memory": get_room_memory,
+# "update_room_memory": update_room_memory,
+# "get_astm_prediction": get_astm_prediction,
+# }
+
+TOOLS = {"get_astm_prediction": get_astm_prediction}
 
 
 def game_feedback_key(thread_id: str) -> str:
@@ -461,11 +464,13 @@ def game_step(state: Dict) -> Dict:
     # Store previous observation and command for ASTM
     state["previous_obs"] = state.get("obs", "")
     previous_command = state.get("previous_command")
-    
+
     # Debug: log state contents
     logger.info(f"DEBUG: state keys: {list(state.keys())}")
-    logger.info(f"DEBUG: raw previous_command from state: {repr(state.get('previous_command'))}")
-    
+    logger.info(
+        f"DEBUG: raw previous_command from state: {repr(state.get('previous_command'))}"
+    )
+
     # Handle potential serialization issues where None becomes "None"
     if previous_command == "None" or previous_command is None:
         previous_command = None
@@ -488,29 +493,35 @@ def game_step(state: Dict) -> Dict:
     state["history"].append(f"{command.strip('\n')}: {obs.strip('\n')}")
 
     # ASTM processing - now that we have the actual game step results
-    logger.info(f"DEBUG: previous_command='{previous_command}', ASTM_AGENT={ASTM_AGENT is not None}")
+    logger.info(
+        f"DEBUG: previous_command='{previous_command}', ASTM_AGENT={ASTM_AGENT is not None}"
+    )
     if ASTM_AGENT and previous_command:
         try:
             # Process the turn with the executed command and current observation
             # This allows ASTM to generate rules from: previous_state + executed_action -> current_state
-            logger.info(f"ASTM processing turn with executed_action: '{previous_command}'")
+            logger.info(
+                f"ASTM processing turn with executed_action: '{previous_command}'"
+            )
             astm_result = ASTM_AGENT.process_turn(
                 observation=obs,
                 feedback=text,  # Use full game text as feedback
-                executed_action=previous_command  # The action that was just executed
+                executed_action=previous_command,  # The action that was just executed
             )
-            
-            logger.info(f"ASTM processed turn: {astm_result['new_rules_generated']} new rules generated")
-            if astm_result['new_rules_generated'] > 0:
+
+            logger.info(
+                f"ASTM processed turn: {astm_result['new_rules_generated']} new rules generated"
+            )
+            if astm_result["new_rules_generated"] > 0:
                 logger.info(f"ASTM model stats: {astm_result['model_stats']}")
-                
+
         except Exception as e:
             logger.error(f"ASTM processing failed: {e}")
     elif ASTM_AGENT and not previous_command:
         logger.info("ASTM: No previous command to generate rules from")
     elif not ASTM_AGENT:
         logger.info("ASTM: ASTM_AGENT is None")
-    
+
     # Store the executed command for the next turn
     state["previous_command"] = command
     logger.info(f"Stored previous_command: '{command}' for next turn")
@@ -611,18 +622,22 @@ def game_over(state: State, config: RunnableConfig) -> State:
 
     # Get existing feedback history for context
     existing_history = redis_client.lrange(key, 0, -1)
-    existing_history = [item.decode() for item in existing_history if item is not None] if existing_history else []
+    existing_history = (
+        [item.decode() for item in existing_history if item is not None]
+        if existing_history
+        else []
+    )
 
     # Process feedback through the trimming system
     try:
         trimmed_entry = process_feedback_for_storage(
             raw_feedback=raw_feedback,
             plan=state["plan"],
-            outcome=state["game_outcome"], 
+            outcome=state["game_outcome"],
             llm=llm,
-            existing_history=existing_history
+            existing_history=existing_history,
         )
-        
+
         # Format the feedback entry with trimmed content
         feedback_entry = f"""
     <game_date>
@@ -631,9 +646,9 @@ def game_over(state: State, config: RunnableConfig) -> State:
     
     {trimmed_entry}
     """
-        
+
         print("\nTrimmed feedback stored:", trimmed_entry)
-        
+
     except Exception as e:
         logger.error(f"Failed to trim feedback: {e}")
         # Fallback to original feedback if trimming fails
@@ -660,7 +675,7 @@ def game_over(state: State, config: RunnableConfig) -> State:
     if feedback_count >= MAX_FEEDBACK_ITEMS:  # type: ignore
         feedback_items = redis_client.lrange(key, 0, -1)
         feedback_items = [item.decode() for item in feedback_items if item is not None]  # type: ignore
-        
+
         # Use more aggressive consolidation for trimmed feedback
         prompt = f"""
         Consolidate the following game feedback into 3 key points:
@@ -678,10 +693,10 @@ def game_over(state: State, config: RunnableConfig) -> State:
         """
         response = state["llm"].invoke(prompt)
         consolidated_summary = str(response.content).strip()
-        
+
         # Keep only the consolidated summary and the most recent few items
         redis_client.delete(key)
-        
+
         # Store consolidated summary
         summary_entry = f"""
     <game_date>
@@ -697,7 +712,7 @@ def game_over(state: State, config: RunnableConfig) -> State:
     </actionable_feedback>
     """
         redis_client.rpush(key, summary_entry)
-        
+
         # Keep the 3 most recent individual entries
         recent_items = feedback_items[-3:]
         for item in recent_items:
@@ -814,10 +829,10 @@ if __name__ == "__main__":
             model=args.model,
         ).bind_tools(
             [
-                read_general_notes,
-                update_general_notes,
-                get_room_memory,
-                update_room_memory,
+                # read_general_notes,
+                # update_general_notes,
+                # get_room_memory,
+                # update_room_memory,
                 get_astm_prediction,
             ]
         ),
@@ -834,20 +849,24 @@ if __name__ == "__main__":
     # Set the global GAME for the tools
     GAME = args.game_path
 
-    # Initialize ASTM agent as global
-    try:
-        ASTM_AGENT = ASTMAgent(
-            redis_client=redis_client,
-            thread_id=THREAD_ID,
-            game_path=args.game_path,
-            llm=ChatOpenAI(model=args.model),
-        )
-        print(
-            f"<ASTM> Initialized with existing model: {ASTM_AGENT.get_model_summary()}"
-        )
-    except Exception as e:
-        logger.error(f"Failed to initialize ASTM agent: {e}")
-        print(f"<ASTM> Warning: Failed to initialize ASTM system: {e}")
+    # Initialize ASTM agent as global (if enabled)
+    if ASTM_ENABLED:
+        try:
+            ASTM_AGENT = ASTMAgent(
+                redis_client=redis_client,
+                thread_id=THREAD_ID,
+                game_path=args.game_path,
+                llm=ChatOpenAI(model=args.model),
+            )
+            print(
+                f"<ASTM> Initialized with existing model: {ASTM_AGENT.get_model_summary()}"
+            )
+        except Exception as e:
+            logger.error(f"Failed to initialize ASTM agent: {e}")
+            print(f"<ASTM> Warning: Failed to initialize ASTM system: {e}")
+            ASTM_AGENT = None
+    else:
+        print("<ASTM> ASTM system disabled")
         ASTM_AGENT = None
 
     conf = RunnableConfig(

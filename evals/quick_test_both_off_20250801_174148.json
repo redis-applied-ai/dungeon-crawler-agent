@@ -1,0 +1,48 @@
+{
+  "config": {
+    "name": "quick_test_both_off",
+    "model": "o3-mini",
+    "max_steps": 3,
+    "num_runs": 1,
+    "game_path": "games/dungeon.ulx",
+    "memory_enabled": true,
+    "astm_enabled": false,
+    "clear_memory_between_runs": false,
+    "base_thread_id": "eval"
+  },
+  "results": [
+    {
+      "run_id": 1,
+      "outcome": "loss",
+      "score": 1,
+      "moves": 3,
+      "time_seconds": 36.8195481300354,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "o3-mini",
+      "thread_id": "eval-run-001",
+      "timestamp": "2025-08-01T17:41:48.665471",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 1,
+        "room_memories_total_size": 683,
+        "feedback_entries": 5
+      }
+    }
+  ],
+  "summary": {
+    "win_rate": 0.0,
+    "avg_score": 1,
+    "avg_moves_to_win": 0,
+    "avg_time_seconds": 36.8195481300354,
+    "score_std": 0,
+    "moves_std": 0,
+    "total_runs": 1,
+    "wins": 0,
+    "losses": 1,
+    "timeouts": 0
+  },
+  "timestamp": "2025-08-01T17:41:48.665688"
+}

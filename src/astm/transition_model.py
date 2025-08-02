@@ -414,6 +414,9 @@ class TransitionModel:
             all_rules.extend(rules)
         all_rules.extend(self.universal_rules)
         
+        # Restore total_rules counter
+        self.total_rules = len(all_rules)
+        
         for rule in all_rules:
             self.rules_by_action[rule.action.verb].append(rule)
             state_sig = self._create_state_signature(rule.condition)

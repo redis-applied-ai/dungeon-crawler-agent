@@ -231,14 +231,14 @@ class ASTMAgent:
                     # Convert JSON to TransitionRule objects
                     condition = StatePattern(rule_data['condition'])
                     action = ActionPattern(
-                        verb=rule_data['action']['verb'],
-                        objects=rule_data['action']['objects'],
+                        verb=rule_data['action'].get('verb', ''),
+                        objects=rule_data['action'].get('objects', []),
                         targets=rule_data['action'].get('targets', [])
                     )
                     outcome = StateChange(
-                        additions=rule_data['outcome']['additions'],
-                        removals=rule_data['outcome']['removals'], 
-                        modifications=rule_data['outcome']['modifications']
+                        additions=rule_data['outcome'].get('additions', {}),
+                        removals=rule_data['outcome'].get('removals', {}), 
+                        modifications=rule_data['outcome'].get('modifications', {})
                     )
                     
                     rule = TransitionRule(

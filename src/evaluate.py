@@ -30,6 +30,7 @@ class GameResult:
     moves: int
     time_seconds: float
     memory_enabled: bool
+    astm_enabled: bool
     model: str
     thread_id: str
     timestamp: str
@@ -45,6 +46,7 @@ class GameResult:
             'moves': self.moves,
             'time_seconds': self.time_seconds,
             'memory_enabled': self.memory_enabled,
+            'astm_enabled': self.astm_enabled,
             'model': self.model,
             'thread_id': self.thread_id,
             'timestamp': self.timestamp,
@@ -63,6 +65,7 @@ class EvaluationConfig:
     num_runs: int
     game_path: str
     memory_enabled: bool
+    astm_enabled: bool
     clear_memory_between_runs: bool
     base_thread_id: str
 
@@ -74,6 +77,7 @@ class EvaluationConfig:
             'num_runs': self.num_runs,
             'game_path': self.game_path,
             'memory_enabled': self.memory_enabled,
+            'astm_enabled': self.astm_enabled,
             'clear_memory_between_runs': self.clear_memory_between_runs,
             'base_thread_id': self.base_thread_id
         }
@@ -137,13 +141,19 @@ class GameRunner:
         # Set environment variables
         env = os.environ.copy()
         env['MAX_STEPS'] = str(config.max_steps)
+        env['ASTM_ENABLED'] = str(config.astm_enabled).lower()
         
         if not config.memory_enabled:
             # Disable memory by clearing relevant Redis keys before each run
             self._disable_memory_for_thread(thread_id)
         
+        if not config.astm_enabled:
+            # Disable ASTM by clearing ASTM models
+            self._disable_astm_for_thread(thread_id)
+        
         print(f"Run {run_id:2d}/{config.num_runs}: Starting game with {config.model} "
-              f"(memory={'on' if config.memory_enabled else 'off'})")
+              f"(memory={'on' if config.memory_enabled else 'off'}, "
+              f"astm={'on' if config.astm_enabled else 'off'})")
         
         # Run the game
         start_time = time.time()
@@ -180,6 +190,7 @@ class GameRunner:
                 moves=moves,
                 time_seconds=end_time - start_time,
                 memory_enabled=config.memory_enabled,
+                astm_enabled=config.astm_enabled,
                 model=config.model,
                 thread_id=thread_id,
                 timestamp=datetime.datetime.now().isoformat(),
@@ -195,6 +206,7 @@ class GameRunner:
                 moves=config.max_steps,
                 time_seconds=end_time - start_time,
                 memory_enabled=config.memory_enabled,
+                astm_enabled=config.astm_enabled,
                 model=config.model,
                 thread_id=thread_id,
                 timestamp=datetime.datetime.now().isoformat()
@@ -222,6 +234,14 @@ class GameRunner:
         # For memory-disabled runs, we'll clear memory before each run
         # The tools will still be called but won't have any data
         self._clear_memory_for_thread(thread_id)
+    
+    def _disable_astm_for_thread(self, thread_id: str):
+        """Disable ASTM by clearing ASTM models."""
+        # Clear ASTM model data for this thread
+        pattern = f"astm_model:{thread_id}:*"
+        keys = self.redis_client.keys(pattern)
+        if keys:
+            self.redis_client.delete(*keys)
     
     def _parse_game_output(self, stdout: str, stderr: str) -> Tuple[str, int, int]:
         """Parse game output to extract outcome, score, and moves."""
@@ -308,6 +328,7 @@ class Evaluator:
         print(f"Max Steps: {config.max_steps}")
         print(f"Runs: {config.num_runs}")
         print(f"Memory: {'Enabled' if config.memory_enabled else 'Disabled'}")
+        print(f"ASTM: {'Enabled' if config.astm_enabled else 'Disabled'}")
         print(f"Thread ID: {config.base_thread_id}")
         
         results = []
@@ -401,7 +422,7 @@ class Evaluator:
 def create_preset_configs(model: str, game_path: str, base_thread_id: str) -> List[EvaluationConfig]:
     """Create preset evaluation configurations for memory comparison."""
     return [
-        # Baseline: No memory
+        # Baseline: No memory, no ASTM
         EvaluationConfig(
             name=f"baseline_no_memory_{model}",
             model=model,
@@ -409,11 +430,12 @@ def create_preset_configs(model: str, game_path: str, base_thread_id: str) -> Li
             num_runs=20,
             game_path=game_path,
             memory_enabled=False,
+            astm_enabled=False,
             clear_memory_between_runs=True,
             base_thread_id=f"{base_thread_id}_baseline"
         ),
         
-        # Memory enabled, cleared between runs
+        # Memory enabled, ASTM disabled, cleared between runs
         EvaluationConfig(
             name=f"memory_fresh_{model}",
             model=model,
@@ -421,11 +443,12 @@ def create_preset_configs(model: str, game_path: str, base_thread_id: str) -> Li
             num_runs=20,
             game_path=game_path,
             memory_enabled=True,
+            astm_enabled=False,
             clear_memory_between_runs=True,
             base_thread_id=f"{base_thread_id}_fresh"
         ),
         
-        # Memory enabled, persistent across runs (learning)
+        # Memory enabled, ASTM disabled, persistent across runs (learning)
         EvaluationConfig(
             name=f"memory_learning_{model}",
             model=model,
@@ -433,6 +456,7 @@ def create_preset_configs(model: str, game_path: str, base_thread_id: str) -> Li
             num_runs=20,
             game_path=game_path,
             memory_enabled=True,
+            astm_enabled=False,
             clear_memory_between_runs=False,
             base_thread_id=f"{base_thread_id}_learning"
         )
@@ -450,6 +474,7 @@ def create_astm_configs(model: str, game_path: str, base_thread_id: str) -> List
             num_runs=15,   # Fewer runs since ASTM takes more time
             game_path=game_path,
             memory_enabled=False,
+            astm_enabled=False,
             clear_memory_between_runs=True,
             base_thread_id=f"{base_thread_id}_no_astm"
         ),
@@ -461,7 +486,8 @@ def create_astm_configs(model: str, game_path: str, base_thread_id: str) -> List
             max_steps=75,
             num_runs=15,
             game_path=game_path,
-            memory_enabled=True,  # ASTM is part of the memory system
+            memory_enabled=True,  # ASTM requires memory system
+            astm_enabled=True,
             clear_memory_between_runs=True,
             base_thread_id=f"{base_thread_id}_astm_fresh"
         ),
@@ -474,8 +500,53 @@ def create_astm_configs(model: str, game_path: str, base_thread_id: str) -> List
             num_runs=15,
             game_path=game_path,
             memory_enabled=True,
+            astm_enabled=True,
             clear_memory_between_runs=False,
             base_thread_id=f"{base_thread_id}_astm_learning"
+        )
+    ]
+
+
+def create_comprehensive_configs(model: str, game_path: str, base_thread_id: str) -> List[EvaluationConfig]:
+    """Create comprehensive evaluation configurations testing meaningful combinations."""
+    return [
+        # Pure baseline: No memory, no ASTM
+        EvaluationConfig(
+            name=f"baseline_{model}",
+            model=model,
+            max_steps=50,
+            num_runs=10,
+            game_path=game_path,
+            memory_enabled=False,
+            astm_enabled=False,
+            clear_memory_between_runs=True,
+            base_thread_id=f"{base_thread_id}_baseline"
+        ),
+        
+        # Memory without ASTM (traditional memory tools only)
+        EvaluationConfig(
+            name=f"memory_only_{model}",
+            model=model,
+            max_steps=50,
+            num_runs=10,
+            game_path=game_path,
+            memory_enabled=True,
+            astm_enabled=False,
+            clear_memory_between_runs=False,
+            base_thread_id=f"{base_thread_id}_memory_only"
+        ),
+        
+        # ASTM with memory (symbolic learning + memory tools)
+        EvaluationConfig(
+            name=f"astm_with_memory_{model}",
+            model=model,
+            max_steps=50,
+            num_runs=10,
+            game_path=game_path,
+            memory_enabled=True,
+            astm_enabled=True,
+            clear_memory_between_runs=False,
+            base_thread_id=f"{base_thread_id}_astm"
         )
     ]
 
@@ -492,22 +563,25 @@ def main():
                        help="Number of runs per evaluation")
     parser.add_argument("--thread-id", type=str, default="eval",
                        help="Base thread ID for evaluation")
-    parser.add_argument("--preset", choices=["memory-comparison", "astm-evaluation", "custom"], 
+    parser.add_argument("--preset", choices=["memory-comparison", "astm-evaluation", "comprehensive", "custom"], 
                        default="memory-comparison",
                        help="Use preset configurations or custom")
     parser.add_argument("--memory-enabled", action="store_true", default=True,
                        help="Enable memory tools (for custom mode)")
+    parser.add_argument("--astm-enabled", action="store_true", default=False,
+                       help="Enable ASTM system (for custom mode)")
     parser.add_argument("--name", type=str, default=None,
                        help="Custom evaluation name")
     
     args = parser.parse_args()
     
     # Validate preset vs custom parameter conflicts
-    if args.preset in ["memory-comparison", "astm-evaluation"]:
+    if args.preset in ["memory-comparison", "astm-evaluation", "comprehensive"]:
         conflicting_params = []
         preset_config = {
             "memory-comparison": {"max_steps": 50, "num_runs": 20},
-            "astm-evaluation": {"max_steps": 75, "num_runs": 15}
+            "astm-evaluation": {"max_steps": 75, "num_runs": 15},
+            "comprehensive": {"max_steps": 50, "num_runs": 10}
         }
         config = preset_config[args.preset]
         
@@ -520,6 +594,8 @@ def main():
             conflicting_params.append(f"--thread-id {args.thread_id} (preset uses eval_*)")
         if not args.memory_enabled:
             conflicting_params.append("--memory-enabled False (preset uses multiple memory configs)")
+        if args.astm_enabled:
+            conflicting_params.append("--astm-enabled True (preset controls ASTM settings)")
         if args.name:
             conflicting_params.append(f"--name {args.name} (preset generates names automatically)")
         
@@ -528,9 +604,13 @@ def main():
             if args.preset == "memory-comparison":
                 print("The memory-comparison preset runs 3 evaluations with fixed configurations:")
                 print("  - 20 runs each, 50 steps max, automatic naming")
-            else:  # astm-evaluation
+            elif args.preset == "astm-evaluation":
                 print("The astm-evaluation preset runs 3 ASTM evaluations with fixed configurations:")
                 print("  - 15 runs each, 75 steps max, automatic naming")
+            else:  # comprehensive
+                print("The comprehensive preset runs 3 meaningful evaluations:")
+                print("  - 10 runs each, 50 steps max, automatic naming")
+                print("  - Tests: baseline, memory-only, ASTM+memory")
             print("")
             print("Conflicting parameters detected:")
             for param in conflicting_params:
@@ -538,7 +618,7 @@ def main():
             print("")
             print("Solutions:")
             print("  1. Use --preset custom to respect your custom parameters:")
-            print(f"     python src/evaluate.py --preset custom --model {args.model} --num-runs {args.num_runs} --max-steps {args.max_steps}")
+            print(f"     python src/evaluate.py --preset custom --model {args.model} --num-runs {args.num_runs or 20} --max-steps {args.max_steps or 50} --astm-enabled")
             print("  2. Remove conflicting parameters to use the preset as-is:")
             print(f"     python src/evaluate.py --preset {args.preset} --model {args.model}")
             print("")
@@ -579,6 +659,26 @@ def main():
             evaluator.compare_evaluations(results[1], results[2])  # ASTM fresh vs ASTM learning
             evaluator.compare_evaluations(results[0], results[2])  # baseline vs ASTM learning
     
+    elif args.preset == "comprehensive":
+        # Run comprehensive evaluation testing all combinations
+        configs = create_comprehensive_configs(args.model, args.game_path, args.thread_id)
+        results = []
+        
+        for config in configs:
+            result = evaluator.run_evaluation(config)
+            results.append(result)
+        
+        # Compare results
+        if len(results) >= 3:
+            print(f"\n{'='*60}")
+            print("=== COMPREHENSIVE SYSTEM EVALUATION RESULTS ===")
+            print("\nBaseline vs Memory-Only:")
+            evaluator.compare_evaluations(results[0], results[1])  # baseline vs memory
+            print("\nBaseline vs ASTM+Memory:")
+            evaluator.compare_evaluations(results[0], results[2])  # baseline vs ASTM
+            print("\nMemory-Only vs ASTM+Memory:")
+            evaluator.compare_evaluations(results[1], results[2])  # memory vs ASTM
+    
     else:
         # Custom evaluation - use sensible defaults if not specified
         config = EvaluationConfig(
@@ -588,6 +688,7 @@ def main():
             num_runs=args.num_runs or 20,
             game_path=args.game_path,
             memory_enabled=args.memory_enabled,
+            astm_enabled=args.astm_enabled,
             clear_memory_between_runs=False,
             base_thread_id=args.thread_id
         )

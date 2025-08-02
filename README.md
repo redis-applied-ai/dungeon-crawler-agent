@@ -8,6 +8,7 @@ This repository contains an AI agent that plays Inform7 text adventure games, sp
 - Memory system that learns from past attempts
 - Spatial mapping through a scratchpad tool
 - Checkpoint saving with Redis
+- **ASTM (Adaptive Symbolic Transition Modeling)** - Predictive modeling system that learns game mechanics
 
 ## Requirements
 
@@ -86,3 +87,34 @@ The agent follows a state machine process:
 3. Executes commands in the game environment
 4. Records results and builds a map in its scratchpad
 5. Learns from wins and losses for future attempts
+
+## ASTM: Adaptive Symbolic Transition Modeling
+
+The agent includes an advanced predictive modeling system called ASTM that learns game mechanics through symbolic representation:
+
+### What ASTM Does
+- **Learns Game Rules**: Automatically discovers patterns in how actions affect the game world
+- **Predicts Outcomes**: Provides predictions for proposed actions before executing them
+- **Builds Symbolic Models**: Converts game interactions into structured rule patterns
+- **Improves Over Time**: Accuracy increases with more gameplay experience
+
+### How Prediction Works
+1. **State Analysis**: Parses game descriptions into symbolic patterns (location, inventory, NPCs, exits)
+2. **Action Modeling**: Converts player commands into structured action representations
+3. **Rule Matching**: Queries learned transition rules to find relevant patterns
+4. **Outcome Prediction**: Generates predictions with confidence scores
+5. **Continuous Learning**: Updates rules based on actual outcomes
+
+### ASTM Integration
+The agent can call `get_astm_prediction(proposed_action)` before taking actions to:
+- Understand likely consequences of actions
+- Avoid known failure states
+- Identify promising exploration paths
+- Learn from failed predictions to improve future accuracy
+
+### Evaluation Modes
+- `baseline_no_astm`: Standard agent without ASTM for comparison
+- `astm_fresh`: ASTM enabled but reset between games (fresh learning)
+- `astm_learning`: Persistent ASTM that accumulates knowledge across games
+
+This system represents a significant advancement in game AI, enabling the agent to develop sophisticated understanding of game mechanics through experience rather than hard-coded rules.
