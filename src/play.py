@@ -1,9 +1,12 @@
 import argparse
+import asyncio
 import datetime
 import logging
 import os
 import re
 import sys
+import threading
+from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict
 
 # Add src directory to path for ASTM imports
@@ -96,6 +99,9 @@ def get_score_change(text: str) -> int:
 
 THREAD_ID = None
 ASTM_AGENT = None
+
+# Background processing executor for ASTM operations
+ASTM_EXECUTOR = ThreadPoolExecutor(max_workers=2, thread_name_prefix="astm-bg")
 
 
 def get_general_notes_key(thread_id: str) -> str:
@@ -514,34 +520,37 @@ def game_step(state: Dict) -> Dict:
     state["moves"] += 1
     state["history"].append(f"{command.strip('\n')}: {obs.strip('\n')}")
 
-    # ASTM processing - now that we have the actual game step results
+    # ASTM processing - now that we have the actual game step results (run in background)
     logger.info(
         f"DEBUG: previous_command='{previous_command}', ASTM_AGENT={ASTM_AGENT is not None}"
     )
     if ASTM_AGENT and previous_command:
-        try:
-            # Process the turn with the executed command and current observation
-            # This allows ASTM to generate rules from: previous_state + executed_action -> current_state
-            logger.info(
-                f"ASTM processing turn with executed_action: '{previous_command}'"
-            )
-            with profiler.profile("astm_process_turn", "astm", action=previous_command, new_rules=0):
-                astm_result = ASTM_AGENT.process_turn(
-                    observation=obs,
-                    feedback=text,  # Use full game text as feedback
-                    executed_action=previous_command,  # The action that was just executed
+        # Submit ASTM processing to background thread - don't wait for result
+        def process_astm_turn():
+            try:
+                logger.info(
+                    f"ASTM processing turn with executed_action: '{previous_command}'"
                 )
-                # Update profiling details with actual results
-                profiler.entries[-1].details["new_rules"] = astm_result['new_rules_generated']
+                with profiler.profile("astm_process_turn", "astm", action=previous_command, new_rules=0):
+                    astm_result = ASTM_AGENT.process_turn(
+                        observation=obs,
+                        feedback=text,  # Use full game text as feedback
+                        executed_action=previous_command,  # The action that was just executed
+                    )
+                    # Update profiling details with actual results
+                    profiler.entries[-1].details["new_rules"] = astm_result['new_rules_generated']
 
-            logger.info(
-                f"ASTM processed turn: {astm_result['new_rules_generated']} new rules generated"
-            )
-            if astm_result["new_rules_generated"] > 0:
-                logger.info(f"ASTM model stats: {astm_result['model_stats']}")
+                logger.info(
+                    f"ASTM processed turn: {astm_result['new_rules_generated']} new rules generated"
+                )
+                if astm_result["new_rules_generated"] > 0:
+                    logger.info(f"ASTM model stats: {astm_result['model_stats']}")
 
-        except Exception as e:
-            logger.error(f"ASTM processing failed: {e}")
+            except Exception as e:
+                logger.error(f"ASTM processing failed: {e}")
+        
+        ASTM_EXECUTOR.submit(process_astm_turn)
+        
     elif ASTM_AGENT and not previous_command:
         logger.info("ASTM: No previous command to generate rules from")
     elif not ASTM_AGENT:
@@ -551,18 +560,22 @@ def game_step(state: Dict) -> Dict:
     state["previous_command"] = command
     logger.info(f"Stored previous_command: '{command}' for next turn")
 
-    # Validate ASTM prediction if we have one
+    # Validate ASTM prediction if we have one (run in background)
     if ASTM_AGENT and "astm_prediction" in state and state["astm_prediction"]:
-        try:
-            with profiler.profile("astm_validation", "astm"):
-                validation_result = ASTM_AGENT.validate_prediction(
-                    state["astm_prediction"], obs
+        # Submit ASTM validation to background thread - don't wait for result
+        def validate_astm_prediction():
+            try:
+                with profiler.profile("astm_validation", "astm"):
+                    validation_result = ASTM_AGENT.validate_prediction(
+                        state["astm_prediction"], obs
+                    )
+                logger.info(
+                    f"ASTM prediction accuracy: {validation_result['prediction_accuracy']:.2f}"
                 )
-            logger.info(
-                f"ASTM prediction accuracy: {validation_result['prediction_accuracy']:.2f}"
-            )
-        except Exception as e:
-            logger.error(f"ASTM validation failed: {e}")
+            except Exception as e:
+                logger.error(f"ASTM validation failed: {e}")
+        
+        ASTM_EXECUTOR.submit(validate_astm_prediction)
 
         # Clear the prediction
         state["astm_prediction"] = None

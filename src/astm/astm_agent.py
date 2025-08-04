@@ -13,6 +13,7 @@ from datetime import datetime
 from langchain_core.messages import HumanMessage, BaseMessage
 from langchain_openai import ChatOpenAI
 from redis import Redis
+from redis.lock import Lock
 
 from .symbolic_language import (
     TransitionRule, StatePattern, ActionPattern, StateChange,
@@ -88,30 +89,43 @@ class ASTMAgent:
             action_for_rules = self.previous_action
             logger.debug(f"Using stored previous_action for rules: {self.previous_action}")
         
-        if self.previous_state and action_for_rules:
-            # Use feedback if provided, otherwise use the state transition itself as feedback
-            effective_feedback = feedback or f"State transition: {self.previous_state.predicates} -> {current_state.predicates}"
+        # Use Redis lock to prevent race conditions when updating model
+        # Block until we can acquire the lock - this is critical data
+        lock = Lock(self.redis_client, self.get_lock_key(), timeout=30)
+        
+        with lock:
+            # Reload model from Redis to get latest state
+            self._load_model_from_redis()
             
-            new_rules = self._generate_transition_rules(
-                self.previous_state, action_for_rules, current_state, effective_feedback
-            )
-            
-            if new_rules:
-                integration_stats = self.model.integrate_rules(new_rules)
-                logger.info(f"Integrated {len(new_rules)} new rules: {integration_stats}")
+            if self.previous_state and action_for_rules:
+                # Use feedback if provided, otherwise use the state transition itself as feedback
+                effective_feedback = feedback or f"State transition: {self.previous_state.predicates} -> {current_state.predicates}"
+                
+                new_rules = self._generate_transition_rules(
+                    self.previous_state, action_for_rules, current_state, effective_feedback
+                )
+                
+                if new_rules:
+                    integration_stats = self.model.integrate_rules(new_rules)
+                    logger.info(f"Integrated {len(new_rules)} new rules: {integration_stats}")
+                else:
+                    logger.info("No rules generated from transition")
+            elif not self.previous_state:
+                logger.info("First turn, no previous state for rule generation")
+                new_rules = []
             else:
-                logger.info("No rules generated from transition")
-        elif not self.previous_state:
-            logger.info("First turn, no previous state for rule generation")
-        else:
-            logger.info("No previous action recorded for rule generation")
+                logger.info("No previous action recorded for rule generation")
+                new_rules = []
+            
+            # Step 3: Resolve conflicts if agent returns to known state  
+            if self.model.has_state_pattern(current_state):
+                resolution_stats = self.model.resolve_intersections(current_state)
+                logger.info(f"Resolved intersections: {resolution_stats}")
+            
+            # Step 6: Save updated model state
+            self._save_model_to_redis()
         
-        # Step 3: Resolve conflicts if agent returns to known state  
-        if self.model.has_state_pattern(current_state):
-            resolution_stats = self.model.resolve_intersections(current_state)
-            logger.info(f"Resolved intersections: {resolution_stats}")
-        
-        # Step 4: If we have a proposed action, predict its outcome
+        # Step 4: If we have a proposed action, predict its outcome (outside lock)
         prediction = None
         if proposed_action:
             action_pattern = extract_action_from_command(proposed_action)
@@ -123,9 +137,6 @@ class ASTMAgent:
         if proposed_action:
             self.previous_action = extract_action_from_command(proposed_action)
             logger.debug(f"Set previous_action to: {self.previous_action}")
-        
-        # Step 6: Save model state
-        self._save_model_to_redis()
         
         return {
             'current_state': current_state,
@@ -170,11 +181,22 @@ class ASTMAgent:
             predicted_outcome.outcome_state, actual_state
         )
         
-        self.prediction_accuracy.append(prediction_accuracy)
+        # Use Redis lock for updating prediction statistics and rule confidences
+        # Block until we can acquire the lock - this data is important for model accuracy
+        lock = Lock(self.redis_client, self.get_lock_key(), timeout=30)
         
-        # Update rule confidences based on accuracy
-        for rule in predicted_outcome.applied_rules:
-            rule.update_confidence(prediction_accuracy > 0.7)
+        with lock:
+            # Reload model to get latest state
+            self._load_model_from_redis()
+            
+            self.prediction_accuracy.append(prediction_accuracy)
+            
+            # Update rule confidences based on accuracy
+            for rule in predicted_outcome.applied_rules:
+                rule.update_confidence(prediction_accuracy > 0.7)
+            
+            # Save updated statistics
+            self._save_model_to_redis()
         
         return {
             'prediction_accuracy': prediction_accuracy,
@@ -309,6 +331,10 @@ class ASTMAgent:
     def get_memory_key(self) -> str:
         """Get Redis key for storing ASTM model."""
         return f"astm_model:{self.thread_id}:{self.game_path}"
+    
+    def get_lock_key(self) -> str:
+        """Get Redis key for ASTM model lock."""
+        return f"astm_lock:{self.thread_id}:{self.game_path}"
     
     def _save_model_to_redis(self):
         """Save current model state to Redis."""
