@@ -1,0 +1,1498 @@
+{
+  "summary": {
+    "llm": {
+      "total_time": 104.549,
+      "count": 78,
+      "avg_time": 1.34,
+      "percentage": 54.5
+    },
+    "astm": {
+      "total_time": 87.139,
+      "count": 86,
+      "avg_time": 1.013,
+      "percentage": 45.5
+    },
+    "redis": {
+      "total_time": 0.005,
+      "count": 3,
+      "avg_time": 0.002,
+      "percentage": 0.0
+    }
+  },
+  "entries": [
+    {
+      "operation": "plan_strategy_llm",
+      "duration": 1.4385969638824463,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 544
+      },
+      "timestamp": 1754333007.296093
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 9.417533874511719e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333008.7369869
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 0.00032711029052734375,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333008.737086
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6980588436126709,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1080
+      },
+      "timestamp": 1754333008.737492
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.6925399303436279,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333009.437061
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 2.002716064453125e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333010.132656
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 5.793571472167969e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333010.132679
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.46683382987976074,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 910
+      },
+      "timestamp": 1754333010.1327832
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.6868741512298584,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333010.60072
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.9727323055267334,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 0
+      },
+      "timestamp": 1754333011.288169
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 0.002076864242553711,
+      "category": "astm",
+      "details": {
+        "action": "go east",
+        "new_rules": 0
+      },
+      "timestamp": 1754333012.2661161
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 1.621246337890625e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333012.26896
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 4.220008850097656e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333012.2689788
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5422992706298828,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1037,
+        "new_rules": 2
+      },
+      "timestamp": 1754333012.2690718
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 3.966301918029785,
+      "category": "astm",
+      "details": {
+        "action": "go east",
+        "new_rules": 0
+      },
+      "timestamp": 1754333012.814369
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 3.1948089599609375e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333016.7822149
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 7.295608520507812e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333016.782252
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6862702369689941,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1058
+      },
+      "timestamp": 1754333016.7823858
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.6892640590667725,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 2
+      },
+      "timestamp": 1754333017.469255
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 5.5973920822143555,
+      "category": "astm",
+      "details": {
+        "action": "go south",
+        "new_rules": 0
+      },
+      "timestamp": 1754333018.165034
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.410743713378906e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333023.76529
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 0.0001621246337890625,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333023.7653399
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6237759590148926,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1307
+      },
+      "timestamp": 1754333023.7656581
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.6290581226348877,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333024.390555
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 3.4006259441375732,
+      "category": "astm",
+      "details": {
+        "action": "go west",
+        "new_rules": 0
+      },
+      "timestamp": 1754333025.021635
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 2.6702880859375e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333028.4251132
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.47955322265625e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333028.4251451
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5589818954467773,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1300
+      },
+      "timestamp": 1754333028.425259
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 1.7813081741333008,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333028.984787
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.4215872287750244,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333030.767612
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 1.9291210174560547,
+      "category": "astm",
+      "details": {
+        "action": "examine cookbook",
+        "new_rules": 0
+      },
+      "timestamp": 1754333031.195078
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 3.3855438232421875e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333033.127844
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.1696090698242188e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333033.1279092
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.7146077156066895,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1251
+      },
+      "timestamp": 1754333033.1280131
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 24.612723112106323,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333033.8447769
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 1.5423262119293213,
+      "category": "astm",
+      "details": {
+        "action": "open fridge",
+        "new_rules": 0
+      },
+      "timestamp": 1754333058.467983
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 5.316734313964844e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333060.0143738
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 4.982948303222656e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333060.014434
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 1.8729357719421387,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1272
+      },
+      "timestamp": 1754333060.0146701
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.46802401542663574,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 2
+      },
+      "timestamp": 1754333061.889336
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 3.0867831707000732,
+      "category": "astm",
+      "details": {
+        "action": "take lettuce",
+        "new_rules": 0
+      },
+      "timestamp": 1754333062.3648498
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.1961669921875e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333065.4556448
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.574920654296875e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333065.455692
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 1.2066779136657715,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1293
+      },
+      "timestamp": 1754333065.455889
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.554973840713501,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 2
+      },
+      "timestamp": 1754333066.6650581
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.991421937942505,
+      "category": "astm",
+      "details": {
+        "action": "take roasted pork chop",
+        "new_rules": 0
+      },
+      "timestamp": 1754333067.223604
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 0.0001747608184814453,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333070.2230022
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 0.00020503997802734375,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333070.223188
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5313091278076172,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1292
+      },
+      "timestamp": 1754333070.224072
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5728371143341064,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333070.758375
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 1.923468828201294,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333071.333241
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.6474819183349609,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 2
+      },
+      "timestamp": 1754333073.258296
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.6889710426330566,
+      "category": "astm",
+      "details": {
+        "action": "take knife",
+        "new_rules": 0
+      },
+      "timestamp": 1754333073.911053
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.792213439941406e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333076.604005
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 5.125999450683594e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333076.60406
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.7238068580627441,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1321
+      },
+      "timestamp": 1754333076.604306
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.7134971618652344,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333077.329324
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.4404878616333008,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333078.044277
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 1.7951672077178955,
+      "category": "astm",
+      "details": {
+        "action": "take yellow apple",
+        "new_rules": 0
+      },
+      "timestamp": 1754333078.4901319
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.792213439941406e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333080.288579
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.384185791015625e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333080.288634
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6974472999572754,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1329
+      },
+      "timestamp": 1754333080.2888389
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.924685001373291,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 2
+      },
+      "timestamp": 1754333080.987217
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.354365348815918,
+      "category": "astm",
+      "details": {
+        "action": "examine patio door",
+        "new_rules": 0
+      },
+      "timestamp": 1754333081.9148228
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 6.890296936035156e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333084.289781
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.5987625122070312e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333084.289857
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5239920616149902,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1329,
+        "new_rules": 2
+      },
+      "timestamp": 1754333084.2900019
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.9785757064819336,
+      "category": "astm",
+      "details": {
+        "action": "open patio door",
+        "new_rules": 0
+      },
+      "timestamp": 1754333084.8204181
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.100799560546875e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333087.802405
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 0.0001392364501953125,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333087.8024518
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6214628219604492,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1544
+      },
+      "timestamp": 1754333087.802756
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.698606014251709,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333088.425215
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5304341316223145,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333089.125123
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.327427864074707,
+      "category": "astm",
+      "details": {
+        "action": "go south",
+        "new_rules": 0
+      },
+      "timestamp": 1754333089.6594932
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.1961669921875e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333091.989943
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.288818359375e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333091.989991
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.750762939453125,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1444
+      },
+      "timestamp": 1754333091.990185
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.7717471122741699,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333092.7418828
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5251588821411133,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 2
+      },
+      "timestamp": 1754333093.5147111
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.5394017696380615,
+      "category": "astm",
+      "details": {
+        "action": "open BBQ",
+        "new_rules": 0
+      },
+      "timestamp": 1754333094.0511591
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 8.869171142578125e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333096.594093
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.6941299438476562e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333096.594193
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5870788097381592,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1450
+      },
+      "timestamp": 1754333096.594474
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.6455762386322021,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333097.1825228
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.7101020812988281,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333097.8295019
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.8006577491760254,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333098.540693
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 1.1233689785003662,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333099.342381
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 1.614400863647461,
+      "category": "astm",
+      "details": {
+        "action": "examine BBQ",
+        "new_rules": 0
+      },
+      "timestamp": 1754333100.47492
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.100799560546875e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333102.092493
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 0.00018930435180664062,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333102.0925398
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6966269016265869,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1537
+      },
+      "timestamp": 1754333102.092916
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 6.474254846572876,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333102.7909482
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.9686050415039062,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 2
+      },
+      "timestamp": 1754333109.266874
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 5.12130880355835,
+      "category": "astm",
+      "details": {
+        "action": "go south",
+        "new_rules": 0
+      },
+      "timestamp": 1754333110.2425442
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 5.1975250244140625e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333115.365788
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 3.5762786865234375e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333115.365848
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6303839683532715,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1526
+      },
+      "timestamp": 1754333115.366124
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.6486358642578125,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333115.9972851
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5259830951690674,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333116.647018
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 5.356856107711792,
+      "category": "astm",
+      "details": {
+        "action": "take tomato",
+        "new_rules": 0
+      },
+      "timestamp": 1754333117.1795359
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 3.790855407714844e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333122.53848
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.6941299438476562e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333122.538523
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6388311386108398,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1551
+      },
+      "timestamp": 1754333122.53872
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5035350322723389,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333123.17958
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 3.469679117202759,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 2
+      },
+      "timestamp": 1754333123.6843069
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.660111904144287,
+      "category": "astm",
+      "details": {
+        "action": "take grilled orange bell pepper",
+        "new_rules": 0
+      },
+      "timestamp": 1754333127.157186
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.792213439941406e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333129.822056
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.5987625122070312e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333129.822112
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.8060216903686523,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1556
+      },
+      "timestamp": 1754333129.8223271
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.42912888526916504,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 2
+      },
+      "timestamp": 1754333130.629976
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 3.079246997833252,
+      "category": "astm",
+      "details": {
+        "action": "take yellow bell pepper",
+        "new_rules": 0
+      },
+      "timestamp": 1754333131.066575
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 7.414817810058594e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333134.14915
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 0.0002961158752441406,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333134.149237
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6846399307250977,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1781,
+        "new_rules": 2
+      },
+      "timestamp": 1754333134.14995
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 4.414107799530029,
+      "category": "astm",
+      "details": {
+        "action": "go north",
+        "new_rules": 0
+      },
+      "timestamp": 1754333134.8448021
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.7206878662109375e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333139.2631638
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 0.00024890899658203125,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333139.263217
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.7541229724884033,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1966
+      },
+      "timestamp": 1754333139.2638001
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.8257222175598145,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333140.0188658
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.35910725593566895,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333140.8457909
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.766741991043091,
+      "category": "astm",
+      "details": {
+        "action": "go north",
+        "new_rules": 0
+      },
+      "timestamp": 1754333141.2308118
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 0.00011277198791503906,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333144.001003
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 0.00035691261291503906,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333144.0011241
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6374220848083496,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1846
+      },
+      "timestamp": 1754333144.00194
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.525238037109375,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333144.640718
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5131173133850098,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333145.1670039
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.4283740520477295,
+      "category": "astm",
+      "details": {
+        "action": "slice lettuce",
+        "new_rules": 0
+      },
+      "timestamp": 1754333145.7098072
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 7.700920104980469e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333148.1431391
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.7894973754882812e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333148.1432252
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.965735912322998,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1868
+      },
+      "timestamp": 1754333148.143786
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.6299540996551514,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333149.1111639
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.659264087677002,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333149.7421398
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 8.99932336807251,
+      "category": "astm",
+      "details": {
+        "action": "chop orange bell pepper",
+        "new_rules": 0
+      },
+      "timestamp": 1754333150.4270048
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.00543212890625e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333159.429055
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.6941299438476562e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333159.429101
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.9589037895202637,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1885
+      },
+      "timestamp": 1754333159.429336
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5316269397735596,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333160.391558
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.9180221557617188,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 2
+      },
+      "timestamp": 1754333160.9244459
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.4885151386260986,
+      "category": "astm",
+      "details": {
+        "action": "chop pork chop",
+        "new_rules": 0
+      },
+      "timestamp": 1754333161.87918
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 3.886222839355469e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333164.370934
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.8848648071289062e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333164.370978
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.7959239482879639,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1900
+      },
+      "timestamp": 1754333164.371416
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.7214117050170898,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333165.169336
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5793697834014893,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333165.8917792
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 3.7649950981140137,
+      "category": "astm",
+      "details": {
+        "action": "chop tomato",
+        "new_rules": 0
+      },
+      "timestamp": 1754333166.496156
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 3.790855407714844e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333170.265121
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.6941299438476562e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333170.265166
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.7993841171264648,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1919
+      },
+      "timestamp": 1754333170.26541
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.6358108520507812,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333171.065705
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5197291374206543,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333171.7033868
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.39812183380126953,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 2
+      },
+      "timestamp": 1754333172.2240472
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.943272113800049,
+      "category": "astm",
+      "details": {
+        "action": "dice yellow apple",
+        "new_rules": 0
+      },
+      "timestamp": 1754333172.625736
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.00543212890625e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333175.572393
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.09808349609375e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333175.572439
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.8713443279266357,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1917
+      },
+      "timestamp": 1754333175.5727308
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 1.4526300430297852,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333176.445277
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5215978622436523,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754333177.89888
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.38660311698913574,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "new_rules": 1
+      },
+      "timestamp": 1754333178.4218628
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 1.6121132373809814,
+      "category": "astm",
+      "details": {
+        "action": "roast yellow apple",
+        "new_rules": 0
+      },
+      "timestamp": 1754333178.81492
+    },
+    {
+      "operation": "astm_model_summary",
+      "duration": 4.291534423828125e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333180.432074
+    },
+    {
+      "operation": "astm_exploration_suggestions",
+      "duration": 2.6226043701171875e-05,
+      "category": "astm",
+      "details": {},
+      "timestamp": 1754333180.4321249
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.41042304039001465,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1942,
+        "new_rules": 2
+      },
+      "timestamp": 1754333180.432456
+    },
+    {
+      "operation": "astm_process_turn",
+      "duration": 2.6852011680603027,
+      "category": "astm",
+      "details": {
+        "action": "prepare meal",
+        "new_rules": 0
+      },
+      "timestamp": 1754333180.848393
+    },
+    {
+      "operation": "game_feedback_llm",
+      "duration": 15.920408010482788,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1593
+      },
+      "timestamp": 1754333183.540041
+    },
+    {
+      "operation": "redis_lrange_feedback",
+      "duration": 0.0035059452056884766,
+      "category": "redis",
+      "details": {
+        "key": "game_feedback:cook-1"
+      },
+      "timestamp": 1754333199.460916
+    },
+    {
+      "operation": "redis_llen_feedback",
+      "duration": 0.0009322166442871094,
+      "category": "redis",
+      "details": {
+        "key": "game_feedback:cook-1"
+      },
+      "timestamp": 1754333201.968319
+    },
+    {
+      "operation": "redis_rpush_latest_feedback",
+      "duration": 0.0007836818695068359,
+      "category": "redis",
+      "details": {
+        "key": "game_feedback:cook-1"
+      },
+      "timestamp": 1754333201.9693031
+    }
+  ]
+}

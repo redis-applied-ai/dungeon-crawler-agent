@@ -1,0 +1,798 @@
+{
+  "summary": {
+    "llm": {
+      "total_time": 58.9,
+      "count": 75,
+      "avg_time": 0.785,
+      "percentage": 100.0
+    },
+    "redis": {
+      "total_time": 0.007,
+      "count": 7,
+      "avg_time": 0.001,
+      "percentage": 0.0
+    }
+  },
+  "entries": [
+    {
+      "operation": "plan_strategy_llm",
+      "duration": 1.7550928592681885,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4o-mini",
+        "prompt_tokens": 792
+      },
+      "timestamp": 1754349647.610377
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.8958759307861328,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1236
+      },
+      "timestamp": 1754349649.367676
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.44574475288391113,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349650.264609
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5391409397125244,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1066
+      },
+      "timestamp": 1754349650.719192
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.585256814956665,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349651.259895
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5476181507110596,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1193
+      },
+      "timestamp": 1754349651.8534558
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.48870110511779785,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349652.402308
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6383390426635742,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1214
+      },
+      "timestamp": 1754349652.899441
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5299150943756104,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349653.539114
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.7768077850341797,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1463
+      },
+      "timestamp": 1754349654.077238
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.40491509437561035,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349654.8567328
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.43237996101379395,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1456
+      },
+      "timestamp": 1754349655.272087
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.910491943359375,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1683
+      },
+      "timestamp": 1754349655.714446
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.3894059658050537,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349656.6278121
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.3916952610015869,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1557
+      },
+      "timestamp": 1754349657.025184
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.527320146560669,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1578
+      },
+      "timestamp": 1754349657.424949
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.47791481018066406,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349657.9534411
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5587949752807617,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1599
+      },
+      "timestamp": 1754349658.440653
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5163969993591309,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349659.00034
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6437606811523438,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1598
+      },
+      "timestamp": 1754349659.5254002
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 1.3664610385894775,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349660.170728
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 1.6064021587371826,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1901
+      },
+      "timestamp": 1754349661.54621
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5902910232543945,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349663.153684
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 1.3005411624908447,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1782
+      },
+      "timestamp": 1754349663.75175
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5365047454833984,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349665.0537112
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.4094111919403076,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1797
+      },
+      "timestamp": 1754349665.599027
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.7118918895721436,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1804
+      },
+      "timestamp": 1754349666.0173812
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5755569934844971,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349666.730222
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.59151291847229,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1805
+      },
+      "timestamp": 1754349667.315367
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.4612300395965576,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349667.907742
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6956460475921631,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1812
+      },
+      "timestamp": 1754349668.3774269
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.46244025230407715,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349669.074781
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6781649589538574,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2027
+      },
+      "timestamp": 1754349669.545645
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.7150380611419678,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349670.224849
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.7510230541229248,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1927
+      },
+      "timestamp": 1754349670.949099
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.4116249084472656,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349671.7010639
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.44102907180786133,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1934
+      },
+      "timestamp": 1754349672.122559
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6890921592712402,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1945
+      },
+      "timestamp": 1754349672.569789
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.3344409465789795,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349673.260541
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5992610454559326,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1957
+      },
+      "timestamp": 1754349673.601193
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5515930652618408,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349674.201337
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.41089296340942383,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 1960
+      },
+      "timestamp": 1754349674.762683
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6656348705291748,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2053
+      },
+      "timestamp": 1754349675.1825511
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5356941223144531,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349675.849482
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.8107566833496094,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2239
+      },
+      "timestamp": 1754349676.3953931
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.34807586669921875,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349677.207127
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5411200523376465,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2212
+      },
+      "timestamp": 1754349677.562937
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.8474340438842773,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349678.105057
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 1.066796064376831,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2201
+      },
+      "timestamp": 1754349678.960542
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.4630720615386963,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349680.028255
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.6403791904449463,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2226
+      },
+      "timestamp": 1754349680.499039
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5203671455383301,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349681.141398
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5162029266357422,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349681.662772
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5878469944000244,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2231
+      },
+      "timestamp": 1754349682.187586
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.40813779830932617,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349682.7763321
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.42205810546875,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2456
+      },
+      "timestamp": 1754349683.1945379
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.8702089786529541,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2641
+      },
+      "timestamp": 1754349683.625932
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.4601569175720215,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349684.4972842
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.7615199089050293,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2521
+      },
+      "timestamp": 1754349684.975276
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.5118236541748047,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349685.7385752
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.7519752979278564,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2543
+      },
+      "timestamp": 1754349686.2750888
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.4053940773010254,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349687.028218
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5630090236663818,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2541
+      },
+      "timestamp": 1754349687.436617
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.36765408515930176,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349688.000114
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5529191493988037,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2570
+      },
+      "timestamp": 1754349688.381696
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.48288798332214355,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349688.9362109
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5269508361816406,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2585
+      },
+      "timestamp": 1754349689.4334981
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.4472320079803467,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349689.961395
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5969870090484619,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2604
+      },
+      "timestamp": 1754349690.423554
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.488908052444458,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349691.021398
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5302441120147705,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2602
+      },
+      "timestamp": 1754349691.520434
+    },
+    {
+      "operation": "tool_continuation_llm",
+      "duration": 0.3579387664794922,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1"
+      },
+      "timestamp": 1754349692.0518122
+    },
+    {
+      "operation": "generate_command_llm",
+      "duration": 0.5027620792388916,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2627
+      },
+      "timestamp": 1754349692.418422
+    },
+    {
+      "operation": "game_feedback_llm",
+      "duration": 12.149262189865112,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4.1",
+        "prompt_tokens": 2111
+      },
+      "timestamp": 1754349692.9311738
+    },
+    {
+      "operation": "redis_lrange_feedback",
+      "duration": 0.001519918441772461,
+      "category": "redis",
+      "details": {
+        "key": "game_feedback:cook-1"
+      },
+      "timestamp": 1754349705.080982
+    },
+    {
+      "operation": "redis_llen_feedback",
+      "duration": 0.001135110855102539,
+      "category": "redis",
+      "details": {
+        "key": "game_feedback:cook-1"
+      },
+      "timestamp": 1754349706.833341
+    },
+    {
+      "operation": "redis_lrange_consolidation",
+      "duration": 0.0006031990051269531,
+      "category": "redis",
+      "details": {
+        "key": "game_feedback:cook-1"
+      },
+      "timestamp": 1754349706.8344908
+    },
+    {
+      "operation": "feedback_consolidation_llm",
+      "duration": 1.8528482913970947,
+      "category": "llm",
+      "details": {
+        "model": "gpt-4o-mini"
+      },
+      "timestamp": 1754349706.8355699
+    },
+    {
+      "operation": "redis_delete_feedback",
+      "duration": 0.0009257793426513672,
+      "category": "redis",
+      "details": {
+        "key": "game_feedback:cook-1"
+      },
+      "timestamp": 1754349708.6884322
+    },
+    {
+      "operation": "redis_rpush_summary",
+      "duration": 0.0005741119384765625,
+      "category": "redis",
+      "details": {
+        "key": "game_feedback:cook-1"
+      },
+      "timestamp": 1754349708.689413
+    },
+    {
+      "operation": "redis_rpush_recent",
+      "duration": 0.001428842544555664,
+      "category": "redis",
+      "details": {
+        "key": "game_feedback:cook-1",
+        "items": 3
+      },
+      "timestamp": 1754349708.6900082
+    },
+    {
+      "operation": "redis_rpush_latest_feedback",
+      "duration": 0.0004291534423828125,
+      "category": "redis",
+      "details": {
+        "key": "game_feedback:cook-1"
+      },
+      "timestamp": 1754349708.691447
+    }
+  ]
+}

@@ -35,6 +35,7 @@ GAME = None
 LOG_LEVEL = os.getenv("LOG_LEVEL", "WARNING")
 MAX_STEPS = int(os.getenv("MAX_STEPS", "400"))
 ASTM_ENABLED = os.getenv("ASTM_ENABLED", "true").lower() == "true"
+ASTM_RULE_GENERATION = os.getenv("ASTM_RULE_GENERATION", "true").lower() == "true"
 
 
 class State(MessagesState):
@@ -102,6 +103,9 @@ ASTM_AGENT = None
 
 # Background processing executor for ASTM operations
 ASTM_EXECUTOR = ThreadPoolExecutor(max_workers=2, thread_name_prefix="astm-bg")
+
+# Separate executor for expensive rule generation (don't block game flow)
+RULE_GEN_EXECUTOR = ThreadPoolExecutor(max_workers=1, thread_name_prefix="rule-gen")
 
 
 def get_general_notes_key(thread_id: str) -> str:
@@ -319,8 +323,8 @@ def plan_strategy(state: Dict, config: RunnableConfig) -> Dict:
     
     Your plan:
     """
-    # Use LLM without tools for planning to avoid tool call conflicts
-    planning_llm = ChatOpenAI(model=state["llm"].model_name)
+    # Use faster model for planning - doesn't need sophisticated reasoning
+    planning_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
     with profiler.profile("plan_strategy_llm", "llm", model=planning_llm.model_name, prompt_tokens=len(prompt.split())):
         response = planning_llm.invoke(prompt)
     plan = response.content
@@ -349,17 +353,19 @@ def generate_next_command(state: Dict, config: RunnableConfig) -> Dict:
         else ""
     )
 
-    # Add ASTM model summary if available
+    # Add ASTM model summary if available (cached to reduce per-turn overhead)
     astm_info = ""
     if ASTM_AGENT:
         try:
-            with profiler.profile("astm_model_summary", "astm"):
-                model_summary = ASTM_AGENT.get_model_summary()
-            with profiler.profile("astm_exploration_suggestions", "astm"):
-                exploration_suggestions = ASTM_AGENT.suggest_exploration_actions(
-                    state["obs"]
-                )
-            astm_info = f"""
+            # Only update ASTM info every 5 turns to reduce latency
+            if state["moves"] % 5 == 0 or not hasattr(state, "_cached_astm_info"):
+                with profiler.profile("astm_model_summary", "astm"):
+                    model_summary = ASTM_AGENT.get_model_summary()
+                with profiler.profile("astm_exploration_suggestions", "astm"):
+                    exploration_suggestions = ASTM_AGENT.suggest_exploration_actions(
+                        state["obs"]
+                    )
+                state["_cached_astm_info"] = f"""
     <astm_model>
         Your learned transition model:
         {model_summary}
@@ -368,6 +374,7 @@ def generate_next_command(state: Dict, config: RunnableConfig) -> Dict:
         {", ".join(exploration_suggestions) if exploration_suggestions else "None"}
     </astm_model>
     """
+            astm_info = state.get("_cached_astm_info", "")
         except Exception as e:
             logger.error(f"Failed to get ASTM info: {e}")
 
@@ -734,8 +741,10 @@ def game_over(state: State, config: RunnableConfig) -> State:
 
         Consolidated insights (3 bullet points max):
         """
-        with profiler.profile("feedback_consolidation_llm", "llm", model=state["llm"].model_name):
-            response = state["llm"].invoke(prompt)
+        # Use faster model for consolidation - this is just summarization
+        consolidation_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.1)
+        with profiler.profile("feedback_consolidation_llm", "llm", model=consolidation_llm.model_name):
+            response = consolidation_llm.invoke(prompt)
         consolidated_summary = str(response.content).strip()
 
         # Keep only the consolidated summary and the most recent few items
@@ -768,6 +777,14 @@ def game_over(state: State, config: RunnableConfig) -> State:
     # Add the latest feedback to the list.
     with profiler.profile("redis_rpush_latest_feedback", "redis", key=key):
         redis_client.rpush(key, feedback_entry)
+
+    # Save ASTM model to Redis at end of game
+    if ASTM_AGENT:
+        try:
+            ASTM_AGENT.save_model_to_redis_final()
+            logger.info("ASTM model saved to Redis at game end")
+        except Exception as e:
+            logger.error(f"Failed to save ASTM model at game end: {e}")
 
     # Print profiling report
     profiler.print_report()
@@ -904,24 +921,33 @@ if __name__ == "__main__":
     GAME = args.game_path
 
     # Initialize ASTM agent as global (if enabled)
+    print(f"<ASTM> ASTM_ENABLED={ASTM_ENABLED}, ASTM_RULE_GENERATION={ASTM_RULE_GENERATION}")
     if ASTM_ENABLED:
         try:
+            print("<ASTM> Attempting to initialize ASTM agent...")
             ASTM_AGENT = ASTMAgent(
                 redis_client=redis_client,
                 thread_id=THREAD_ID,
                 game_path=args.game_path,
                 llm=ChatOpenAI(model=args.model),
+                enable_rule_generation=ASTM_RULE_GENERATION,
+                rule_gen_executor=RULE_GEN_EXECUTOR,
             )
             print(
-                f"<ASTM> Initialized with existing model: {ASTM_AGENT.get_model_summary()}"
+                f"<ASTM> ✅ Successfully initialized with existing model: {ASTM_AGENT.get_model_summary()}"
             )
+            print(f"<ASTM> Agent type: {type(ASTM_AGENT)}")
         except Exception as e:
             logger.error(f"Failed to initialize ASTM agent: {e}")
-            print(f"<ASTM> Warning: Failed to initialize ASTM system: {e}")
+            print(f"<ASTM> ❌ Failed to initialize ASTM system: {e}")
+            import traceback
+            traceback.print_exc()
             ASTM_AGENT = None
     else:
         print("<ASTM> ASTM system disabled")
         ASTM_AGENT = None
+    
+    print(f"<ASTM> Final ASTM_AGENT value: {ASTM_AGENT}")
 
     conf = RunnableConfig(
         configurable={"thread_id": THREAD_ID},

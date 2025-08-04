@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
       "Bash(make:*)",
@@ -23,7 +24,11 @@
       "Bash(MAX_STEPS=10 python play.py --game-path ../games/dungeon.ulx --model o3-mini --thread astm-test-5)",
       "Bash(MAX_STEPS=10 python play.py --game-path ../games/dungeon.ulx --model o3-mini --thread astm-test-6)",
       "Bash(MAX_STEPS=3 python play.py --game-path ../games/dungeon.ulx --model o3-mini --thread astm-test-7)",
-      "Bash(MAX_STEPS=3 LOG_LEVEL=INFO uv run python src/play.py --game-path games/dungeon.ulx --model o3-mini --thread debug-test --clear-memory)"
+      "Bash(MAX_STEPS=3 LOG_LEVEL=INFO uv run python src/play.py --game-path games/dungeon.ulx --model o3-mini --thread debug-test --clear-memory)",
+      "Bash(touch:*)",
+      "Bash(MAX_STEPS=2 python src/play.py --game-path games/dungeon.ulx --model gpt-4.1 --thread test-counter-fix)",
+      "Bash(ASTM_ENABLED=false MAX_STEPS=5 uv run python src/play.py --thread-id test-astm-off --model o3-mini --game-path games/dungeon.ulx)",
+      "Bash(MAX_STEPS=10 uv run python src/play.py --game-path /Users/andrew.brookins/src/dungeon-crawler-agent/tw_games/tw-cooking-recipe5+take5+cut+open+go9-GgXlFjRDTEKncV1r.z8 --model gpt-4.1 --thread test-fix)"
     ],
     "deny": []
   }
