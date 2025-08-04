@@ -1,0 +1,48 @@
+{
+  "config": {
+    "name": "test-dungeon-scoring",
+    "model": "gpt-4.1",
+    "max_steps": 10,
+    "num_runs": 1,
+    "game_path": "games/dungeon.ulx",
+    "memory_enabled": true,
+    "astm_enabled": false,
+    "clear_memory_between_runs": false,
+    "base_thread_id": "eval"
+  },
+  "results": [
+    {
+      "run_id": 1,
+      "outcome": "loss",
+      "score": 6,
+      "moves": 10,
+      "time_seconds": 39.176008224487305,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval-run-001",
+      "timestamp": "2025-08-04T09:05:25.233864",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 1,
+        "room_memories_total_size": 683,
+        "feedback_entries": 5
+      }
+    }
+  ],
+  "summary": {
+    "win_rate": 0.0,
+    "avg_score": 6,
+    "avg_moves_to_win": 0,
+    "avg_time_seconds": 39.176008224487305,
+    "score_std": 0,
+    "moves_std": 0,
+    "total_runs": 1,
+    "wins": 0,
+    "losses": 1,
+    "timeouts": 0
+  },
+  "timestamp": "2025-08-04T09:05:25.234074"
+}

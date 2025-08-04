@@ -22,6 +22,7 @@ from langchain_core.tools import tool
 from redis import Redis
 from astm.astm_agent import ASTMAgent
 from feedback_trimmer import process_feedback_for_storage
+from profiler import profiler
 
 
 dotenv.load_dotenv()
@@ -124,7 +125,8 @@ def read_general_notes() -> dict[str, Any]:
     if THREAD_ID is None:
         raise ValueError("Thread ID not set")
     key = get_general_notes_key(THREAD_ID)
-    return redis_client.json().get(key) or {}
+    with profiler.profile("read_general_notes", "redis", key=key):
+        return redis_client.json().get(key) or {}
 
 
 @tool
@@ -163,7 +165,8 @@ def update_general_notes(contents: dict[str, Any]):
         raise ValueError("Thread ID not set")
     key = get_general_notes_key(THREAD_ID)
     logger.info("Updating general notes: %s", contents)
-    redis_client.json().set(key, "$", contents)
+    with profiler.profile("update_general_notes", "redis", key=key, data_size=len(str(contents))):
+        redis_client.json().set(key, "$", contents)
 
 
 @tool
@@ -189,8 +192,9 @@ def get_room_memory(room_name: str) -> str:
     if THREAD_ID is None:
         raise ValueError("Thread ID not set")
     key = get_room_memory_key(THREAD_ID, room_name)
-    memory = redis_client.get(key)
-    return memory.decode() if memory else ""
+    with profiler.profile("get_room_memory", "redis", key=key, room=room_name):
+        memory = redis_client.get(key)
+        return memory.decode() if memory else ""
 
 
 @tool
@@ -211,9 +215,10 @@ def get_astm_prediction(proposed_action: str) -> str:
     try:
         current_state = _get_current_state()
         if current_state and hasattr(current_state, "obs"):
-            prediction = ASTM_AGENT.get_action_prediction(
-                current_state.obs, proposed_action
-            )
+            with profiler.profile("astm_prediction", "astm", action=proposed_action):
+                prediction = ASTM_AGENT.get_action_prediction(
+                    current_state.obs, proposed_action
+                )
             return prediction.to_natural_language()
         else:
             return "Unable to access current game state"
@@ -268,7 +273,8 @@ def update_room_memory(room_name: str, memory: str):
         raise ValueError("Thread ID not set")
     key = get_room_memory_key(THREAD_ID, room_name)
     logger.info("Updating room memory for %s: %s", room_name, memory)
-    redis_client.set(key, memory)
+    with profiler.profile("update_room_memory", "redis", key=key, room=room_name, data_size=len(memory)):
+        redis_client.set(key, memory)
 
 
 # TOOLS = {
@@ -309,7 +315,8 @@ def plan_strategy(state: Dict, config: RunnableConfig) -> Dict:
     """
     # Use LLM without tools for planning to avoid tool call conflicts
     planning_llm = ChatOpenAI(model=state["llm"].model_name)
-    response = planning_llm.invoke(prompt)
+    with profiler.profile("plan_strategy_llm", "llm", model=planning_llm.model_name, prompt_tokens=len(prompt.split())):
+        response = planning_llm.invoke(prompt)
     plan = response.content
     state["plan"] = plan
     print(f"<Thinking> My plan is: \n{plan}")
@@ -340,10 +347,12 @@ def generate_next_command(state: Dict, config: RunnableConfig) -> Dict:
     astm_info = ""
     if ASTM_AGENT:
         try:
-            model_summary = ASTM_AGENT.get_model_summary()
-            exploration_suggestions = ASTM_AGENT.suggest_exploration_actions(
-                state["obs"]
-            )
+            with profiler.profile("astm_model_summary", "astm"):
+                model_summary = ASTM_AGENT.get_model_summary()
+            with profiler.profile("astm_exploration_suggestions", "astm"):
+                exploration_suggestions = ASTM_AGENT.suggest_exploration_actions(
+                    state["obs"]
+                )
             astm_info = f"""
     <astm_model>
         Your learned transition model:
@@ -400,7 +409,8 @@ def generate_next_command(state: Dict, config: RunnableConfig) -> Dict:
         """
     llm = state["llm"]
     messages: list[BaseMessage] = [HumanMessage(prompt)]
-    response = llm.invoke(messages)
+    with profiler.profile("generate_command_llm", "llm", model=llm.model_name, prompt_tokens=len(prompt.split())):
+        response = llm.invoke(messages)
     messages.append(response)
 
     # Handle tool calls in a loop
@@ -430,10 +440,12 @@ def generate_next_command(state: Dict, config: RunnableConfig) -> Dict:
 
             # Give the LLM a chance to fix its tool call and try again.
             if failed:
-                response = llm.invoke(messages)
+                with profiler.profile("tool_error_retry_llm", "llm", model=llm.model_name):
+                    response = llm.invoke(messages)
 
         # continue conversation
-        response = llm.invoke(messages)
+        with profiler.profile("tool_continuation_llm", "llm", model=llm.model_name):
+            response = llm.invoke(messages)
         messages.append(response)
 
     command = str(response.content).strip()
@@ -487,7 +499,17 @@ def game_step(state: Dict) -> Dict:
 
     state["obs"] = obs
     score_change = get_score_change(text)
-    state["score"] = state["score"] + score_change
+    
+    # Handle different scoring systems:
+    # - Dungeon games: Use text-based scoring (accumulate score_change), TextWorld rewards are always 0
+    # - tw-cooking games: Use TextWorld rewards directly (cumulative total), no text-based scoring
+    if reward > 0:
+        # TextWorld game with reward-based scoring - use reward as total score
+        state["score"] = reward
+    elif score_change != 0:
+        # Text-based scoring (dungeon games) - accumulate changes
+        state["score"] = state["score"] + score_change
+    # If both are 0, no score change
     state["done"] = done
     state["moves"] += 1
     state["history"].append(f"{command.strip('\n')}: {obs.strip('\n')}")
@@ -503,11 +525,14 @@ def game_step(state: Dict) -> Dict:
             logger.info(
                 f"ASTM processing turn with executed_action: '{previous_command}'"
             )
-            astm_result = ASTM_AGENT.process_turn(
-                observation=obs,
-                feedback=text,  # Use full game text as feedback
-                executed_action=previous_command,  # The action that was just executed
-            )
+            with profiler.profile("astm_process_turn", "astm", action=previous_command, new_rules=0):
+                astm_result = ASTM_AGENT.process_turn(
+                    observation=obs,
+                    feedback=text,  # Use full game text as feedback
+                    executed_action=previous_command,  # The action that was just executed
+                )
+                # Update profiling details with actual results
+                profiler.entries[-1].details["new_rules"] = astm_result['new_rules_generated']
 
             logger.info(
                 f"ASTM processed turn: {astm_result['new_rules_generated']} new rules generated"
@@ -529,9 +554,10 @@ def game_step(state: Dict) -> Dict:
     # Validate ASTM prediction if we have one
     if ASTM_AGENT and "astm_prediction" in state and state["astm_prediction"]:
         try:
-            validation_result = ASTM_AGENT.validate_prediction(
-                state["astm_prediction"], obs
-            )
+            with profiler.profile("astm_validation", "astm"):
+                validation_result = ASTM_AGENT.validate_prediction(
+                    state["astm_prediction"], obs
+                )
             logger.info(
                 f"ASTM prediction accuracy: {validation_result['prediction_accuracy']:.2f}"
             )
@@ -615,13 +641,15 @@ def game_over(state: State, config: RunnableConfig) -> State:
     """
 
     llm = state["llm"]
-    response = llm.invoke(prompt)
+    with profiler.profile("game_feedback_llm", "llm", model=llm.model_name, prompt_tokens=len(prompt.split())):
+        response = llm.invoke(prompt)
     raw_feedback = str(response.content).strip()
 
     print("My feedback on the game: ", raw_feedback)
 
     # Get existing feedback history for context
-    existing_history = redis_client.lrange(key, 0, -1)
+    with profiler.profile("redis_lrange_feedback", "redis", key=key):
+        existing_history = redis_client.lrange(key, 0, -1)
     existing_history = (
         [item.decode() for item in existing_history if item is not None]
         if existing_history
@@ -671,9 +699,11 @@ def game_over(state: State, config: RunnableConfig) -> State:
     """
 
     # If there are too many feedback items, consolidate the oldest ones
-    feedback_count = redis_client.llen(key)
+    with profiler.profile("redis_llen_feedback", "redis", key=key):
+        feedback_count = redis_client.llen(key)
     if feedback_count >= MAX_FEEDBACK_ITEMS:  # type: ignore
-        feedback_items = redis_client.lrange(key, 0, -1)
+        with profiler.profile("redis_lrange_consolidation", "redis", key=key):
+            feedback_items = redis_client.lrange(key, 0, -1)
         feedback_items = [item.decode() for item in feedback_items if item is not None]  # type: ignore
 
         # Use more aggressive consolidation for trimmed feedback
@@ -691,11 +721,13 @@ def game_over(state: State, config: RunnableConfig) -> State:
 
         Consolidated insights (3 bullet points max):
         """
-        response = state["llm"].invoke(prompt)
+        with profiler.profile("feedback_consolidation_llm", "llm", model=state["llm"].model_name):
+            response = state["llm"].invoke(prompt)
         consolidated_summary = str(response.content).strip()
 
         # Keep only the consolidated summary and the most recent few items
-        redis_client.delete(key)
+        with profiler.profile("redis_delete_feedback", "redis", key=key):
+            redis_client.delete(key)
 
         # Store consolidated summary
         summary_entry = f"""
@@ -711,15 +743,24 @@ def game_over(state: State, config: RunnableConfig) -> State:
     {consolidated_summary}
     </actionable_feedback>
     """
-        redis_client.rpush(key, summary_entry)
+        with profiler.profile("redis_rpush_summary", "redis", key=key):
+            redis_client.rpush(key, summary_entry)
 
         # Keep the 3 most recent individual entries
         recent_items = feedback_items[-3:]
-        for item in recent_items:
-            redis_client.rpush(key, item)
+        with profiler.profile("redis_rpush_recent", "redis", key=key, items=len(recent_items)):
+            for item in recent_items:
+                redis_client.rpush(key, item)
 
     # Add the latest feedback to the list.
-    redis_client.rpush(key, feedback_entry)
+    with profiler.profile("redis_rpush_latest_feedback", "redis", key=key):
+        redis_client.rpush(key, feedback_entry)
+
+    # Print profiling report
+    profiler.print_report()
+    
+    # Save detailed profiling data to file
+    profiler.save_to_file(f"profile_report_{thread_id}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json")
 
     return state
 

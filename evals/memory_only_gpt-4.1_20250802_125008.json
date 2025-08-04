@@ -1,0 +1,228 @@
+{
+  "config": {
+    "name": "memory_only_gpt-4.1",
+    "model": "gpt-4.1",
+    "max_steps": 50,
+    "num_runs": 10,
+    "game_path": "/Users/andrew.brookins/src/dungeon-crawler-agent/tw_games/tw-cooking-recipe5+take5+cut+open+go9-GgXlFjRDTEKncV1r.z8",
+    "memory_enabled": true,
+    "astm_enabled": false,
+    "clear_memory_between_runs": false,
+    "base_thread_id": "eval_memory_only"
+  },
+  "results": [
+    {
+      "run_id": 1,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 22,
+      "time_seconds": 39.83493399620056,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval_memory_only-run-001",
+      "timestamp": "2025-08-02T12:40:47.055711",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 2,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 12,
+      "time_seconds": 29.734405279159546,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval_memory_only-run-002",
+      "timestamp": "2025-08-02T12:41:17.070877",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 3,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 50,
+      "time_seconds": 72.45426893234253,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval_memory_only-run-003",
+      "timestamp": "2025-08-02T12:42:29.767700",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 4,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 49,
+      "time_seconds": 76.63846898078918,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval_memory_only-run-004",
+      "timestamp": "2025-08-02T12:43:46.606316",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 5,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 50,
+      "time_seconds": 74.07056427001953,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval_memory_only-run-005",
+      "timestamp": "2025-08-02T12:45:00.800356",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 6,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 50,
+      "time_seconds": 73.65301370620728,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval_memory_only-run-006",
+      "timestamp": "2025-08-02T12:46:14.655669",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 7,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 50,
+      "time_seconds": 65.75902390480042,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval_memory_only-run-007",
+      "timestamp": "2025-08-02T12:47:20.538522",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 8,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 48,
+      "time_seconds": 81.13951992988586,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval_memory_only-run-008",
+      "timestamp": "2025-08-02T12:48:41.921203",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 9,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 28,
+      "time_seconds": 44.94552397727966,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval_memory_only-run-009",
+      "timestamp": "2025-08-02T12:49:27.005424",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 10,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 23,
+      "time_seconds": 41.356260776519775,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval_memory_only-run-010",
+      "timestamp": "2025-08-02T12:50:08.488057",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    }
+  ],
+  "summary": {
+    "win_rate": 0.0,
+    "avg_score": 0,
+    "avg_moves_to_win": 0,
+    "avg_time_seconds": 59.958598375320435,
+    "score_std": 0.0,
+    "moves_std": 15.105554533938097,
+    "total_runs": 10,
+    "wins": 0,
+    "losses": 10,
+    "timeouts": 0
+  },
+  "timestamp": "2025-08-02T12:50:08.488357"
+}

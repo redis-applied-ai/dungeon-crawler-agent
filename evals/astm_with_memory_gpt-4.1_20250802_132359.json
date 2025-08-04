@@ -1,0 +1,228 @@
+{
+  "config": {
+    "name": "astm_with_memory_gpt-4.1",
+    "model": "gpt-4.1",
+    "max_steps": 50,
+    "num_runs": 10,
+    "game_path": "/Users/andrew.brookins/src/dungeon-crawler-agent/tw_games/tw-cooking-recipe5+take5+cut+open+go9-GgXlFjRDTEKncV1r.z8",
+    "memory_enabled": true,
+    "astm_enabled": true,
+    "clear_memory_between_runs": false,
+    "base_thread_id": "eval_astm"
+  },
+  "results": [
+    {
+      "run_id": 1,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 50,
+      "time_seconds": 243.29715991020203,
+      "memory_enabled": true,
+      "astm_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_astm-run-001",
+      "timestamp": "2025-08-02T12:54:12.035901",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 2,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 50,
+      "time_seconds": 218.85149908065796,
+      "memory_enabled": true,
+      "astm_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_astm-run-002",
+      "timestamp": "2025-08-02T12:57:51.231387",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 3,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 50,
+      "time_seconds": 207.6332070827484,
+      "memory_enabled": true,
+      "astm_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_astm-run-003",
+      "timestamp": "2025-08-02T13:01:19.058211",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 4,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 16,
+      "time_seconds": 72.0418872833252,
+      "memory_enabled": true,
+      "astm_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_astm-run-004",
+      "timestamp": "2025-08-02T13:02:31.193340",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 5,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 48,
+      "time_seconds": 194.8461730480194,
+      "memory_enabled": true,
+      "astm_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_astm-run-005",
+      "timestamp": "2025-08-02T13:05:46.135927",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 6,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 43,
+      "time_seconds": 196.45029473304749,
+      "memory_enabled": true,
+      "astm_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_astm-run-006",
+      "timestamp": "2025-08-02T13:09:02.811445",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 7,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 46,
+      "time_seconds": 200.72586488723755,
+      "memory_enabled": true,
+      "astm_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_astm-run-007",
+      "timestamp": "2025-08-02T13:12:23.770338",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 8,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 50,
+      "time_seconds": 238.2793469429016,
+      "memory_enabled": true,
+      "astm_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_astm-run-008",
+      "timestamp": "2025-08-02T13:16:22.145891",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 9,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 50,
+      "time_seconds": 226.24342584609985,
+      "memory_enabled": true,
+      "astm_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_astm-run-009",
+      "timestamp": "2025-08-02T13:20:08.489052",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    },
+    {
+      "run_id": 10,
+      "outcome": "loss",
+      "score": 0,
+      "moves": 50,
+      "time_seconds": 231.0468361377716,
+      "memory_enabled": true,
+      "astm_enabled": true,
+      "model": "gpt-4.1",
+      "thread_id": "eval_astm-run-010",
+      "timestamp": "2025-08-02T13:23:59.780681",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    }
+  ],
+  "summary": {
+    "win_rate": 0.0,
+    "avg_score": 0,
+    "avg_moves_to_win": 0,
+    "avg_time_seconds": 202.94156949520112,
+    "score_std": 0.0,
+    "moves_std": 10.56251232740898,
+    "total_runs": 10,
+    "wins": 0,
+    "losses": 10,
+    "timeouts": 0
+  },
+  "timestamp": "2025-08-02T13:23:59.782660"
+}

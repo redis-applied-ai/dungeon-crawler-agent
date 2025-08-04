@@ -1,0 +1,68 @@
+{
+  "config": {
+    "name": "test-tw-cooking-fix",
+    "model": "gpt-4.1",
+    "max_steps": 20,
+    "num_runs": 2,
+    "game_path": "/Users/andrew.brookins/src/dungeon-crawler-agent/tw_games/tw-cooking-recipe5+take5+cut+open+go9-GgXlFjRDTEKncV1r.z8",
+    "memory_enabled": true,
+    "astm_enabled": false,
+    "clear_memory_between_runs": false,
+    "base_thread_id": "eval"
+  },
+  "results": [
+    {
+      "run_id": 1,
+      "outcome": "loss",
+      "score": 36,
+      "moves": 20,
+      "time_seconds": 39.324989795684814,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval-run-001",
+      "timestamp": "2025-08-03T11:07:25.931858",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 1,
+        "room_memories_total_size": 683,
+        "feedback_entries": 5
+      }
+    },
+    {
+      "run_id": 2,
+      "outcome": "loss",
+      "score": 30,
+      "moves": 20,
+      "time_seconds": 36.961270809173584,
+      "memory_enabled": true,
+      "astm_enabled": false,
+      "model": "gpt-4.1",
+      "thread_id": "eval-run-002",
+      "timestamp": "2025-08-03T11:08:03.058293",
+      "plan": "",
+      "feedback": "",
+      "memory_usage": {
+        "general_notes_size": 0,
+        "room_memories_count": 0,
+        "room_memories_total_size": 0,
+        "feedback_entries": 3
+      }
+    }
+  ],
+  "summary": {
+    "win_rate": 0.0,
+    "avg_score": 33,
+    "avg_moves_to_win": 0,
+    "avg_time_seconds": 38.1431303024292,
+    "score_std": 4.242640687119285,
+    "moves_std": 0.0,
+    "total_runs": 2,
+    "wins": 0,
+    "losses": 2,
+    "timeouts": 0
+  },
+  "timestamp": "2025-08-03T11:08:03.058570"
+}
